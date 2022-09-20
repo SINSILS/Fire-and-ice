@@ -11,7 +11,8 @@ namespace Client
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new Fire_And_Ice());
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Forma());
         }
     }
 }
