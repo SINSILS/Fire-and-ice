@@ -15,18 +15,10 @@ namespace Client
     {
         HubConnection hubConnection;
 
-        bool goLeft, goRight, jumping, isGameOver;
+        Player playerOne = new(false, false, false, false, 0, 0, 0, 7, 5, 3);
+        Enemy enemy = new(3);
 
-        int jumpSpeed;
-        int force;
-        int score = 0;
-        int playerSpeed = 7;
-
-        int horizontalSpeed = 5;
-        int verticalSpeed = 3;
-
-        int enemyOneSpeed = 3;
-        int enemyTwoSpeed = 3;
+        //int enemyTwoSpeed = 3;
 
 
 
@@ -50,34 +42,34 @@ namespace Client
 
         private void MainGameTimerEvent(object sender, EventArgs e)
         {
-            txtScore.Text = "Score: " + score;
 
-            player.Top += jumpSpeed;
+            txtScore.Text = "Score: " + playerOne.score;
 
-            if (goLeft == true)
+            player.Top += playerOne.jumpSpeed;
+
+            if (playerOne.goLeft == true)
             {
-                player.Left -= playerSpeed;
+                player.Left -= playerOne.playerSpeed;
             }
-            if (goRight == true)
+            if (playerOne.goRight == true)
             {
-                player.Left += playerSpeed;
-            }
-
-            if (jumping == true && force < 0)
-            {
-                jumping = false;
+                player.Left += playerOne.playerSpeed;
             }
 
-            if (jumping == true)
+            if (playerOne.jumping == true && playerOne.force < 0)
             {
-                jumpSpeed = -8;
-                force -= 1;
+                playerOne.jumping = false;
+            }
+
+            if (playerOne.jumping == true)
+            {
+                playerOne.jumpSpeed = -8;
+                playerOne.force -= 1;
             }
             else
             {
-                jumpSpeed = 10;
+                playerOne.jumpSpeed = 10;
             }
-
             foreach (Control x in this.Controls)
             {
                 if (x is PictureBox)
@@ -88,13 +80,13 @@ namespace Client
                     {
                         if (player.Bounds.IntersectsWith(x.Bounds))
                         {
-                            force = 8;
+                            playerOne.force = 8;
                             player.Top = x.Top - player.Height;
 
 
-                            if ((string)x.Name == "horizontalPlatform" && goLeft == false || (string)x.Name == "horizontalPlatform" && goRight == false)
+                            if ((string)x.Name == "horizontalPlatform" && playerOne.goLeft == false || (string)x.Name == "horizontalPlatform" && playerOne.goRight == false)
                             {
-                                player.Left -= horizontalSpeed;
+                                player.Left -= playerOne.horizontalSpeed;
                             }
 
 
@@ -109,7 +101,7 @@ namespace Client
                         if (player.Bounds.IntersectsWith(x.Bounds) && x.Visible == true)
                         {
                             x.Visible = false;
-                            score++;
+                            playerOne.score++;
                         }
                     }
 
@@ -119,12 +111,12 @@ namespace Client
                         if (player.Bounds.IntersectsWith(x.Bounds))
                         {
                             gameTimer.Stop();
-                            isGameOver = true;
-                            txtScore.Text = "Score: " + score + Environment.NewLine + "You were killed in your journey!!";
+                            playerOne.isGameOver = true;
+                            txtScore.Text = "Score: " + playerOne.score + Environment.NewLine + "You were killed in your journey!!";
                         }
                         else
                         {
-                            txtScore.Text = "Score: " + score + Environment.NewLine + "Collect all the coins";
+                            txtScore.Text = "Score: " + playerOne.score + Environment.NewLine + "Collect all the coins";
                         }
                     }
 
@@ -132,45 +124,45 @@ namespace Client
             }
 
 
-            horizontalPlatform.Left -= horizontalSpeed;
+            horizontalPlatform.Left -= playerOne.horizontalSpeed;
 
             if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
             {
-                horizontalSpeed = -horizontalSpeed;
+                playerOne.horizontalSpeed = playerOne.horizontalSpeed *-1;
             }
 
-            verticalPlatform.Top += verticalSpeed;
+            verticalPlatform.Top += playerOne.verticalSpeed * -1;
 
             if (verticalPlatform.Top < 195 || verticalPlatform.Top > 581)
             {
-                verticalSpeed = -verticalSpeed;
+                playerOne.verticalSpeed = playerOne.verticalSpeed * -1;
             }
 
 
-            enemyOne.Left -= enemyOneSpeed;
+            enemyOne.Left -= enemy.speed;
 
             if (enemyOne.Left < pictureBox5.Left || enemyOne.Left + enemyOne.Width > pictureBox5.Left + pictureBox5.Width)
             {
-                enemyOneSpeed = -enemyOneSpeed;
+                enemy.speed = enemy.speed * -1;
             }
 
             if (player.Top + player.Height > this.ClientSize.Height + 50)
             {
                 gameTimer.Stop();
-                isGameOver = true;
-                txtScore.Text = "Score: " + score + Environment.NewLine + "You fell to your death!";
+                playerOne.isGameOver = true;
+                txtScore.Text = "Score: " + playerOne.score + Environment.NewLine + "You fell to your death!";
             }
 
-            if (player.Bounds.IntersectsWith(door.Bounds) && score == 26)
+            if (player.Bounds.IntersectsWith(door.Bounds) && playerOne.score == 26)
             {
                 gameTimer.Stop();
-                isGameOver = true;
-                txtScore.Text = "Score: " + score + Environment.NewLine + "Your quest is complete!";
+                playerOne.isGameOver = true;
+                txtScore.Text = "Score: " + playerOne.score + Environment.NewLine + "Your quest is complete!";
             }
 
-            if(score == 26)
+            if(playerOne.score == 26)
             {
-                txtScore.Text = "Score: " + score + Environment.NewLine + "Your quest is complete!";
+                txtScore.Text = "Score: " + playerOne.score + Environment.NewLine + "Your quest is complete!";
             }
         }
 
@@ -178,15 +170,15 @@ namespace Client
         {
             if (e.KeyCode == Keys.Left)
             {
-                goLeft = true;
+                playerOne.goLeft = true;
             }
             if (e.KeyCode == Keys.Right)
             {
-                goRight = true;
+                playerOne.goRight = true;
             }
-            if (e.KeyCode == Keys.Space && jumping == false)
+            if (e.KeyCode == Keys.Space && playerOne.jumping == false)
             {
-                jumping = true;
+                playerOne.jumping = true;
             }
         }
 
@@ -194,18 +186,18 @@ namespace Client
         {
             if (e.KeyCode == Keys.Left)
             {
-                goLeft = false;
+                playerOne.goLeft = false;
             }
             if (e.KeyCode == Keys.Right)
             {
-                goRight = false;
+                playerOne.goRight = false;
             }
-            if (jumping == true)
+            if (playerOne.jumping == true)
             {
-                jumping = false;
+                playerOne.jumping = false;
             }
 
-            if (e.KeyCode == Keys.Enter && isGameOver == true)
+            if (e.KeyCode == Keys.Enter && playerOne.isGameOver == true)
             {
                 RestartGame();
             }
@@ -221,11 +213,11 @@ namespace Client
         private void RestartGame()
         {
 
-            jumping = false;
-            goLeft = false;
-            goRight = false;
-            isGameOver = false;
-            score = 0;
+            playerOne.jumping = false;
+            playerOne.goLeft = false;
+            playerOne.goRight = false;
+            playerOne.isGameOver = false;
+            playerOne.score = 0;
 
             //txtScore.Text = "Score: " + score;
             txtScore.Refresh();
