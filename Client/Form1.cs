@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.SignalR.Client;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,7 @@ namespace Client
 {
     public partial class Forma : Form
     {
+        HubConnection hubConnection;
 
         bool goLeft, goRight, jumping, isGameOver;
 
@@ -32,6 +34,18 @@ namespace Client
         {
             InitializeComponent();
             DoubleBuffered = true;
+
+            hubConnection = new HubConnectionBuilder()
+                .WithAutomaticReconnect()
+                .WithUrl("http://localhost:7021/gameHub")
+                .Build();
+            hubConnection.StartAsync();
+        }
+
+        private async void Forma_Load(object sender, EventArgs e)
+        {
+            // Sends message as soon as client is launched
+            await hubConnection.SendAsync("SendMessage", $"Joined Game");
         }
 
         private void MainGameTimerEvent(object sender, EventArgs e)
@@ -159,6 +173,7 @@ namespace Client
                 txtScore.Text = "Score: " + score + Environment.NewLine + "Your quest is complete!";
             }
         }
+
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Left)
