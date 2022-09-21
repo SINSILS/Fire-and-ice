@@ -38,14 +38,14 @@ namespace Client
             hubConnection = new HubConnectionBuilder()
                 .WithAutomaticReconnect()
                 .WithUrl("http://localhost:7021/gameHub")
-                .Build();
-            hubConnection.StartAsync();
+                .Build();        
         }
 
         private async void Forma_Load(object sender, EventArgs e)
         {
+            await hubConnection.StartAsync();
             // Sends message as soon as client is launched
-            await hubConnection.SendAsync("SendMessage", $"Joined Game");
+            await hubConnection.SendAsync("SendMessage", $"Joined Game {hubConnection.ConnectionId}");
         }
 
         private void MainGameTimerEvent(object sender, EventArgs e)
