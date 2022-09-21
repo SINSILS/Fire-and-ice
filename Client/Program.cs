@@ -12,7 +12,7 @@ namespace Client
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Forma());
+            Application.Run(new TestForm2());
         }
     }
 }

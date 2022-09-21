@@ -15,7 +15,7 @@ namespace Client
     {
         HubConnection hubConnection;
 
-        Player playerOne = new(false, false, false, false, 0, 0, 0, 7, 5, 3);
+        Player playerOne = new(false, false, false, false, 0, 0, 0, 7, 5, 3, "owahfoiawifha");
         Enemy enemy = new(3);
 
         //int enemyTwoSpeed = 3;
