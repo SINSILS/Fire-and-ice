@@ -7,4 +7,4 @@ builder.Services.AddSignalR();
 var app = builder.Build();
 app.MapGet("/", () => "This is game server's api");
 app.MapHub<GameHub>("/gameHub");
-app.Run("http://localhost:7021");
+app.Run();

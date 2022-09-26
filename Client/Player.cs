@@ -22,9 +22,7 @@ namespace Client
         public int horizontalSpeed { get; set; }
         public int verticalSpeed { get; set; }
 
-        public string connectionID { get; set; }
-
-        public Player(bool goLeft, bool goRight, bool jumping, bool isGameOver, int jumpSpeed, int force, int score, int playerSpeed, int horizontalSpeed, int verticalSpeed, string connectionID)
+        public Player(bool goLeft, bool goRight, bool jumping, bool isGameOver, int jumpSpeed, int force, int score, int playerSpeed, int horizontalSpeed, int verticalSpeed)
         {
             this.goLeft=goLeft;
             this.goRight=goRight;
@@ -36,7 +34,6 @@ namespace Client
             this.playerSpeed=playerSpeed;
             this.horizontalSpeed=horizontalSpeed;
             this.verticalSpeed=verticalSpeed;
-            this.connectionID=connectionID;
         }
 
     }
