@@ -26,37 +26,6 @@ namespace Server.Hubs
 
         }
 
-        public async Task<Player> ConnectPlayer(string nickname)
-        {
-            if(UserHandler.GamePlayers.Count == 2)
-            {
-                return null;
-            }
-
-            var player = new Player()
-            {
-                Id = UserHandler.GamePlayers.Count,
-            };
-            UserHandler.GamePlayers.Add(player);
-
-            await Clients.Others.SendAsync("NewPlayer", player);
-            Console.WriteLine($"Player {player.Id} connected!");
-            return player;
-        }
-
-        public async Task<Player> GetOtherPlayer(int id)
-        {
-            foreach(Player p in UserHandler.GamePlayers)
-            {
-                if(p.Id != id)
-                {
-                    return p;
-                }
-            }
-
-            return null;
-        }
-
         public async Task CheckHowManyOnlineIs(string message)
         {
             Console.WriteLine($"Check recieved: {message}");
@@ -87,43 +56,6 @@ namespace Server.Hubs
             }
             Console.WriteLine("PLayer index:" + index); 
             await Clients.Caller.SendAsync("asigningPlayers", index.ToString());
-        }
-
-        public async Task CheckHowManyReadyIs(string message)
-        {
-            //if (!UserHandler.ConnectedIds.Contains(Context.ConnectionId))
-            {
-                GameInfo.HowManyIsRead++;
-            }
-            Console.WriteLine(GameInfo.HowManyIsRead);
-            Console.WriteLine(UserHandler.ConnectedIds.ToString());
-            await Clients.All.SendAsync("checkReady", GameInfo.HowManyIsRead.ToString());
-        }
-
-        public async Task UndoReady(string message)
-        {
-            GameInfo.HowManyIsRead--;
-            //Console.WriteLine($"Check recieved: {message}");
-            await Clients.All.SendAsync("undoReady", GameInfo.HowManyIsRead.ToString());
-        }
-
-        public async Task StartCounting(string message)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                var time = i + 1;
-                await Clients.All.SendAsync("counter", time.ToString());
-                Thread.Sleep(1000);
-            }
-            GameInfo.GameIsStarted = true;
-            Thread.Sleep(1000);
-            await Clients.All.SendAsync("counter", "BEGIN");
-        }
-
-        public async Task ResetReady(string message)
-        {
-            GameInfo.HowManyIsRead = 0;
-            await Clients.All.SendAsync("resetCount", "Reseted");
         }
 
         public async Task GetFirtPlayerCordinates(string message)
