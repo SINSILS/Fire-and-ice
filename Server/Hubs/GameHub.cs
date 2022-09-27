@@ -72,3 +72,8 @@ namespace Server.Hubs
         }
     }
 }
+
+
+//Kol antras neprisijungia kitam nepasileidzia zaidimas
+//Singleton - tasku skaiciavimas
+//Nubraizyt klasiu diagrama (10 klasiu (coin ir tt.))
