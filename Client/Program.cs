@@ -7,7 +7,7 @@ namespace Client
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new Forma());
+            Application.Run(new Lobby());
         }
     }
 }

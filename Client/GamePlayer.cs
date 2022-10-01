@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    public class Player
+    public class GamePlayer
     {
         public bool goLeft, goRight, jumping, isGameOver;
 
@@ -22,7 +22,7 @@ namespace Client
         public int horizontalSpeed { get; set; }
         public int verticalSpeed { get; set; }
 
-        public Player(bool goLeft, bool goRight, bool jumping, bool isGameOver, int jumpSpeed, int force, int score, int playerSpeed, int horizontalSpeed, int verticalSpeed)
+        public GamePlayer(bool goLeft, bool goRight, bool jumping, bool isGameOver, int jumpSpeed, int force, int score, int playerSpeed, int horizontalSpeed, int verticalSpeed)
         {
             this.goLeft=goLeft;
             this.goRight=goRight;

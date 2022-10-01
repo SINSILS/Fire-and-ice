@@ -19,7 +19,7 @@ namespace Client
     {
         private HubConnection connection;
 
-        Player playerStats = new(false, false, false, false, 0, 0, 0, 7, 5, 3);
+        GamePlayer playerStats = new(false, false, false, false, 0, 0, 0, 7, 5, 3);
         Enemy enemy = new(3);
         int playerIndex;
 
