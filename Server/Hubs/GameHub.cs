@@ -75,7 +75,6 @@ namespace Server.Hubs
 
         public async Task CheckHowManyReadyIs(string message)
         {
-            //if (!UserHandler.ConnectedIds.Contains(Context.ConnectionId))
             {
                 GameInfo.HowManyIsRead++;
             }
@@ -87,7 +86,6 @@ namespace Server.Hubs
         public async Task UndoReady(string message)
         {
             GameInfo.HowManyIsRead--;
-            //Console.WriteLine($"Check recieved: {message}");
             await Clients.All.SendAsync("undoReady", GameInfo.HowManyIsRead.ToString());
         }
 
@@ -129,14 +127,12 @@ namespace Server.Hubs
 
         public async Task GetFirtPlayerCordinates(string message)
         {
-            //Console.WriteLine("Player first:" + message);
             await Clients.All.SendAsync("firstPlayer", message);
         }
 
 
         public async Task GetSecondPlayerCordinates(string message)
         {
-            //Console.WriteLine("Player Second:" + message);
             await Clients.All.SendAsync("secondPlayer", message);
         }
     }

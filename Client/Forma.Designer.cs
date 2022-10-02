@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Forma));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
@@ -221,11 +222,12 @@
             // 
             // player1
             // 
-            this.player1.BackColor = System.Drawing.Color.Cyan;
-            this.player1.Location = new System.Drawing.Point(593, 560);
+            this.player1.BackColor = System.Drawing.Color.LightBlue;
+            this.player1.Image = ((System.Drawing.Image)(resources.GetObject("player1.Image")));
+            this.player1.Location = new System.Drawing.Point(582, 525);
             this.player1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.player1.Name = "player1";
-            this.player1.Size = new System.Drawing.Size(26, 33);
+            this.player1.Size = new System.Drawing.Size(36, 71);
             this.player1.TabIndex = 2;
             this.player1.TabStop = false;
             this.player1.Tag = "player1";
@@ -588,11 +590,13 @@
             // 
             // player2
             // 
-            this.player2.BackColor = System.Drawing.Color.Red;
-            this.player2.Location = new System.Drawing.Point(532, 560);
-            this.player2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.player2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.player2.Image = ((System.Drawing.Image)(resources.GetObject("player2.Image")));
+            this.player2.Location = new System.Drawing.Point(528, 525);
+            this.player2.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
             this.player2.Name = "player2";
-            this.player2.Size = new System.Drawing.Size(26, 33);
+            this.player2.Size = new System.Drawing.Size(36, 71);
+            this.player2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.player2.TabIndex = 9;
             this.player2.TabStop = false;
             this.player2.Tag = "player2";
