@@ -135,6 +135,15 @@ namespace Server.Hubs
         {
             await Clients.All.SendAsync("secondPlayer", message);
         }
+
+        public async Task GetFirstCoinsStatus(string message) 
+        {
+            await Clients.All.SendAsync("firstCoins", message);
+        }
+        public async Task GetSecondCoinsStatus(string message)
+        {
+            await Clients.All.SendAsync("secondCoins", message);
+        }
     }
 }
 

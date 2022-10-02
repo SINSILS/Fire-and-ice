@@ -22,8 +22,8 @@ namespace Client
         GamePlayer playerStats = new(false, false, false, false, 0, 0, 0, 7, 5, 3);
         Enemy enemy = new(3);
         int playerIndex;
-
-
+        Dictionary<string, Coin> coins = new Dictionary<string, Coin>();
+        Score score = new Score();
         PictureBox player;
 
         public Forma()
@@ -33,6 +33,8 @@ namespace Client
             player = player1;
             AsignPlayers();
             SendCordinatesTimer.Start();
+            getCoins();
+
         }
 
         private async void AsignPlayers()
@@ -55,7 +57,6 @@ namespace Client
                     playerLabel.Text = message;
                     label1.Text = "Fire Boy";
                     player = player2;
-
                 }
             });
             await connection.SendAsync("AsignPlayer", "");
@@ -64,7 +65,7 @@ namespace Client
         private void gameTimer_TickAsync(object sender, EventArgs e)
         {
 
-            txtScore.Text = "Score: " + playerStats.score;
+            txtScore.Text = "Score: " + score.value;
 
             player.Top += playerStats.jumpSpeed;
 
@@ -121,8 +122,10 @@ namespace Client
                     {
                         if (player.Bounds.IntersectsWith(x.Bounds) && x.Visible == true)
                         {
-                            x.Visible = false;
-                            playerStats.score++;
+                            coins[x.Name].setInvisible();
+                            SendCoinsState_Async(x.Name);
+                            //Update when coins will have different values
+                            score.increaseScore(1);
                         }
                     }
 
@@ -133,11 +136,11 @@ namespace Client
                         {
                             gameTimer.Stop();
                             playerStats.isGameOver = true;
-                            txtScore.Text = "Score: " + playerStats.score + Environment.NewLine + "You were killed in your journey!!";
+                            txtScore.Text = "Score: " + score.value + Environment.NewLine + "You were killed in your journey!!";
                         }
                         else
                         {
-                            txtScore.Text = "Score: " + playerStats.score + Environment.NewLine + "Collect all the coins";
+                            txtScore.Text = "Score: " + score.value + Environment.NewLine + "Collect all the coins";
                         }
                     }
 
@@ -149,7 +152,7 @@ namespace Client
 
             if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
             {
-                playerStats.horizontalSpeed = playerStats.horizontalSpeed *-1;
+                playerStats.horizontalSpeed = playerStats.horizontalSpeed * -1;
             }
 
             verticalPlatform.Top += playerStats.verticalSpeed * -1;
@@ -171,12 +174,12 @@ namespace Client
             {
                 gameTimer.Stop();
                 playerStats.isGameOver = true;
-                txtScore.Text = "Score: " + playerStats.score + Environment.NewLine + "Your quest is complete!";
+                txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
             }
 
             if (playerStats.score == 26)
             {
-                txtScore.Text = "Score: " + playerStats.score + Environment.NewLine + "Your quest is complete!";
+                txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
             }
         }
 
@@ -248,7 +251,6 @@ namespace Client
 
         }
 
-
         private void SendCordinatesTimer_Tick(object sender, EventArgs e)
         {
             SendCordinates_TickAsync();
@@ -286,8 +288,46 @@ namespace Client
             verticalPlatform.Top = 581;
 
             gameTimer.Start();
+        }
 
+        //Sets taken coins to invisible from another player and updates score
+        public async Task SendCoinsState_Async(string coinName)
+        {
+            if (int.Parse(playerLabel.Text) == 1)
+            {
+                connection.On<string>("secondCoins", (message) =>
+                {
+                    string[] splitedText = message.Split(',');
+                    coins[splitedText[0]].setInvisible();
+                    score.value = Convert.ToInt32(splitedText[1]);
+                    txtScore.Text = "Score: " + score.value;
+                });
+                await connection.SendAsync("GetFirstCoinsStatus", coinName + "," + score.value);
+            }
+            else
+            {
+                connection.On<string>("firstCoins", (message) =>
+                {
+                    string[] splitedText = message.Split(',');
+                    coins[splitedText[0]].setInvisible();
+                    score.value = Convert.ToInt32(splitedText[1]);
+                    txtScore.Text = "Score: " + score.value;
+                });
+                await connection.SendAsync("GetSecondCoinsStatus", coinName + "," + score.value);
+            }
+        }
 
+        //Gets all coins pictureBoxes to Dictionary for player
+        public void getCoins()
+        {
+            foreach (Control x in this.Controls)
+            {
+                if (x is PictureBox && (string)x.Tag == "coin")
+                {
+                    Coin coin = new Coin((PictureBox)x);
+                    coins.Add(x.Name, coin);
+                }
+            }
         }
     }
 }
