@@ -1,17 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using Shared.Shared;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Client
 {
@@ -64,7 +51,6 @@ namespace Client
 
         private void gameTimer_TickAsync(object sender, EventArgs e)
         {
-
             txtScore.Text = "Score: " + score.value;
 
             player.Top += playerStats.jumpSpeed;
@@ -96,8 +82,6 @@ namespace Client
             {
                 if (x is PictureBox)
                 {
-
-
                     if ((string)x.Tag == "platform")
                     {
                         if (player.Bounds.IntersectsWith(x.Bounds))
@@ -110,12 +94,9 @@ namespace Client
                             {
                                 player.Left -= playerStats.horizontalSpeed;
                             }
-
-
                         }
 
                         x.BringToFront();
-
                     }
 
                     if ((string)x.Tag == "coin")
@@ -128,7 +109,6 @@ namespace Client
                             score.increaseScore(1);
                         }
                     }
-
 
                     if ((string)x.Tag == "enemy")
                     {
@@ -143,10 +123,8 @@ namespace Client
                             txtScore.Text = "Score: " + score.value + Environment.NewLine + "Collect all the coins";
                         }
                     }
-
                 }
             }
-
 
             horizontalPlatform.Left -= playerStats.horizontalSpeed;
 
@@ -161,7 +139,6 @@ namespace Client
             {
                 playerStats.verticalSpeed = playerStats.verticalSpeed * -1;
             }
-
 
             enemyOne.Left -= enemy.speed;
 
@@ -182,7 +159,6 @@ namespace Client
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
             }
         }
-
 
         public async Task SendCordinates_TickAsync()
         {
@@ -275,10 +251,7 @@ namespace Client
                     x.Visible = true;
                 }
             }
-
-
             // reset the position of player, platform and enemies
-
             player.Left = 593;
             player.Top = 564;
 
