@@ -9,10 +9,12 @@ namespace Client
     public class Enemy
     {
         public int speed { get; set; }
+        public int damage { get; }
 
         public Enemy(int speed)
         {
             this.speed=speed;
+            this.damage = 1;
         }
     }
 }

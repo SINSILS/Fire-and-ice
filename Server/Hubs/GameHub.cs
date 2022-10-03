@@ -121,7 +121,7 @@ namespace Server.Hubs
                 index = 2;
                 UserHandler.Players[1] = true;
             }
-            Console.WriteLine("PLayer index:" + index);
+            Console.WriteLine("Player index:" + index);
             await Clients.Caller.SendAsync("asigningPlayers", index.ToString());
         }
 
