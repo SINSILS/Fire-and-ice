@@ -23,7 +23,7 @@ namespace Client
         Enemy enemy = new(3);
         int playerIndex;
         Dictionary<string, Coin> coins = new Dictionary<string, Coin>();
-        Score score = new Score();
+        Score score = Score.getInstance();
         PictureBox player;
 
         public Forma()

@@ -6,16 +6,31 @@ using System.Threading.Tasks;
 
 namespace Client
 {
-    internal class Score
+    //Singleton
+    public class Score
     {
+        private static Score instance = null;
+        private static object threadLock = new object();
         public int value { get; set; }
 
-        public Score()
+        private Score() 
         {
             value = 0;
         }
 
-        public void increaseScore(int x) 
+        public static Score getInstance() 
+        {
+            lock(threadLock)
+            {
+                if(instance == null) 
+                {
+                    instance = new Score();
+                }
+                return instance;
+            }
+        }
+
+        public void increaseScore(int x)
         {
             value = value + x;
         }
