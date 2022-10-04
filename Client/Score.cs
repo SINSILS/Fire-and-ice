@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Client
+﻿namespace Client
 {
     //Singleton
     public class Score
@@ -13,16 +7,16 @@ namespace Client
         private static object threadLock = new object();
         public int value { get; set; }
 
-        private Score() 
+        private Score()
         {
             value = 0;
         }
 
-        public static Score getInstance() 
+        public static Score getInstance()
         {
-            lock(threadLock)
+            lock (threadLock)
             {
-                if(instance == null) 
+                if (instance == null)
                 {
                     instance = new Score();
                 }

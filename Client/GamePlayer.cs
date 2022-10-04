@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace Client
+﻿namespace Client
 {
     public class GamePlayer
     {
@@ -24,16 +14,16 @@ namespace Client
 
         public GamePlayer(bool goLeft, bool goRight, bool jumping, bool isGameOver, int jumpSpeed, int force, int score, int playerSpeed, int horizontalSpeed, int verticalSpeed)
         {
-            this.goLeft=goLeft;
-            this.goRight=goRight;
-            this.jumping=jumping;
-            this.isGameOver=isGameOver;
-            this.jumpSpeed=jumpSpeed;
-            this.force=force;
-            this.score=score;
-            this.playerSpeed=playerSpeed;
-            this.horizontalSpeed=horizontalSpeed;
-            this.verticalSpeed=verticalSpeed;
+            this.goLeft = goLeft;
+            this.goRight = goRight;
+            this.jumping = jumping;
+            this.isGameOver = isGameOver;
+            this.jumpSpeed = jumpSpeed;
+            this.force = force;
+            this.score = score;
+            this.playerSpeed = playerSpeed;
+            this.horizontalSpeed = horizontalSpeed;
+            this.verticalSpeed = verticalSpeed;
         }
 
     }

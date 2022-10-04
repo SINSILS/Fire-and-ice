@@ -136,7 +136,7 @@ namespace Server.Hubs
             await Clients.All.SendAsync("secondPlayer", message);
         }
 
-        public async Task GetFirstCoinsStatus(string message) 
+        public async Task GetFirstCoinsStatus(string message)
         {
             await Clients.All.SendAsync("firstCoins", message);
         }
@@ -151,3 +151,10 @@ namespace Server.Hubs
 //Kol antras neprisijungia kitam nepasileidzia zaidimas
 //Singleton - tasku skaiciavimas
 //Nubraizyt klasiu diagrama (10 klasiu (coin ir tt.))
+
+
+//2022-10-04
+//Abstract factory - pressure plate, lever - T
+//Factory - platformos - T
+//Strategy - movement - M
+//Observer - apie communication - B

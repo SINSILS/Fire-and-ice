@@ -239,7 +239,7 @@ namespace Client
             playerStats.goLeft = false;
             playerStats.goRight = false;
             playerStats.isGameOver = false;
-            playerStats.score = 0;
+
 
             //txtScore.Text = "Score: " + score;
             txtScore.Refresh();
@@ -259,7 +259,7 @@ namespace Client
 
             horizontalPlatform.Left = 275;
             verticalPlatform.Top = 581;
-
+            score.value = 0;
             gameTimer.Start();
         }
 
