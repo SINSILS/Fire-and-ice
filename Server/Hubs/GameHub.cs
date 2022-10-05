@@ -144,6 +144,17 @@ namespace Server.Hubs
         {
             await Clients.All.SendAsync("secondCoins", message);
         }
+
+        public async Task GetFirstLeverStatus(string message)
+        {
+            await Clients.All.SendAsync("firstLever", message);
+           // Console.WriteLine($"1 Lever: {message}");
+        }
+        public async Task GetSecondLeverStatus(string message)
+        {
+            await Clients.All.SendAsync("secondLever", message);
+           // Console.WriteLine($"2 Lever: {message}");
+        }
     }
 }
 

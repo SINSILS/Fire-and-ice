@@ -7,13 +7,14 @@ namespace Client
     {
         private HubConnection connection;
 
-        GamePlayer playerStats = new(3,false, false, false, false, 0, 0, 0, 7, 5, 3);
+        GamePlayer playerStats = new(3, false, false, false, false, 0, 0, 0, 7, 5, 3);
         Enemy enemy = new(3);
         Dictionary<string, Coin> coins = new Dictionary<string, Coin>();
         Score score = Score.getInstance();
         PictureBox player;
 
-        bool CanPress, temp;
+        bool CanPress;
+        string temp, temp2;
 
         Lever lever = new(false);
 
@@ -23,7 +24,7 @@ namespace Client
             DoubleBuffered = true;
             player = player1;
             AsignPlayers();
-            getCoins();         
+            getCoins();
         }
 
         private async void AsignPlayers()
@@ -127,22 +128,25 @@ namespace Client
                         }
                     }
 
-                    if((string)x.Tag == "lever")
+                    if ((string)x.Tag == "lever")
                     {
                         CanPress=true;
-                        if(player.Bounds.IntersectsWith(x.Bounds) && playerStats.canPress == true && CanPress == true  && lever.isPushed == false)
+                        if (player.Bounds.IntersectsWith(x.Bounds) && playerStats.canPress == true && CanPress == true  && lever.isPushed == false)
                         {
-                            x.BackColor = Color.Green;
+                            Leveer.BackColor= Color.Green;
+
                             playerStats.canPress = false;
                             lever.isPushed=true;
+
                         }
 
                         if (player.Bounds.IntersectsWith(x.Bounds) && playerStats.canPress == true && CanPress == true && lever.isPushed == true)
                         {
-                            x.BackColor = Color.Red;
+                            Leveer.BackColor = Color.Red;
                             playerStats.canPress = false;
                             lever.isPushed=false;
-                        }                  
+
+                        }
                     }
                 }
             }
@@ -182,6 +186,7 @@ namespace Client
 
             SendCordinates_TickAsync();
             SendCoinsState_Async("");
+            SendLeverState_Async();
         }
 
         public async Task SendCordinates_TickAsync()
@@ -233,6 +238,41 @@ namespace Client
                     txtScore.Text = "Score: " + score.value;
                 });
                 await connection.SendAsync("GetSecondCoinsStatus", coinName + "," + score.value);
+
+            }
+
+
+        }
+
+        public async Task SendLeverState_Async()
+        {
+
+            if (int.Parse(playerLabel.Text) == 1)
+            {
+                connection.On<string>("secondLever", (message) =>
+                {
+                    string[] splitedText = message.Split(',');
+                    temp = message;
+                    if (message=="True")
+                    {
+                        Leveer.BackColor=Color.Green;
+                    }
+                });
+                await connection.SendAsync("GetFirstLeverStatus",lever.isPushed.ToString());
+            }
+            else
+            {
+                connection.On<string>("firstLever", (message) =>
+                {
+                    string[] splitedText = message.Split(',');
+                    temp2 = message;
+                    if (message=="True")
+                    {
+                        Leveer.BackColor=Color.Green;
+                    }
+
+                });
+                await connection.SendAsync("GetSecondLeverStatus", lever.isPushed.ToString());
 
             }
         }
