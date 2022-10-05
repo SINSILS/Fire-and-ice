@@ -76,6 +76,7 @@
             this.player2 = new System.Windows.Forms.PictureBox();
             this.playerLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.Leveer = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -118,6 +119,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Leveer)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -223,10 +225,11 @@
             // 
             this.player1.BackColor = System.Drawing.Color.Transparent;
             this.player1.Image = ((System.Drawing.Image)(resources.GetObject("player1.Image")));
-            this.player1.Location = new System.Drawing.Point(625, 522);
+            this.player1.Location = new System.Drawing.Point(615, 542);
             this.player1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.player1.Name = "player1";
-            this.player1.Size = new System.Drawing.Size(36, 71);
+            this.player1.Size = new System.Drawing.Size(30, 60);
+            this.player1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.player1.TabIndex = 2;
             this.player1.TabStop = false;
             this.player1.Tag = "player1";
@@ -592,15 +595,14 @@
             this.player2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.player2.BackColor = System.Drawing.Color.Transparent;
             this.player2.Image = ((System.Drawing.Image)(resources.GetObject("player2.Image")));
-            this.player2.Location = new System.Drawing.Point(625, 522);
+            this.player2.Location = new System.Drawing.Point(664, 540);
             this.player2.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
             this.player2.Name = "player2";
-            this.player2.Size = new System.Drawing.Size(36, 71);
-            this.player2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.player2.Size = new System.Drawing.Size(30, 60);
+            this.player2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.player2.TabIndex = 9;
             this.player2.TabStop = false;
             this.player2.Tag = "player2";
-            //
             // 
             // playerLabel
             // 
@@ -622,12 +624,25 @@
             this.label1.TabIndex = 11;
             this.label1.Text = "label1";
             // 
+            // Leveer
+            // 
+            this.Leveer.BackColor = System.Drawing.Color.Transparent;
+            this.Leveer.Image = ((System.Drawing.Image)(resources.GetObject("Leveer.Image")));
+            this.Leveer.Location = new System.Drawing.Point(737, 540);
+            this.Leveer.Name = "Leveer";
+            this.Leveer.Size = new System.Drawing.Size(72, 61);
+            this.Leveer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Leveer.TabIndex = 12;
+            this.Leveer.TabStop = false;
+            this.Leveer.Tag = "lever";
+            // 
             // Forma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightBlue;
             this.ClientSize = new System.Drawing.Size(922, 632);
+            this.Controls.Add(this.Leveer);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.playerLabel);
             this.Controls.Add(this.player2);
@@ -720,6 +735,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Leveer)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -772,5 +788,6 @@
         private PictureBox player2;
         private Label playerLabel;
         private Label label1;
+        private PictureBox Leveer;
     }
 }

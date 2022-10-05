@@ -7,12 +7,15 @@ namespace Client
     {
         private HubConnection connection;
 
-        GamePlayer playerStats = new(false, false, false, false, 0, 0, 0, 7, 5, 3);
+        GamePlayer playerStats = new(3,false, false, false, false, 0, 0, 0, 7, 5, 3);
         Enemy enemy = new(3);
         Dictionary<string, Coin> coins = new Dictionary<string, Coin>();
         Score score = Score.getInstance();
         PictureBox player;
-        bool collected =false;
+
+        bool CanPress, temp;
+
+        Lever lever = new(false);
 
         public Forma()
         {
@@ -114,14 +117,32 @@ namespace Client
                     {
                         if (player.Bounds.IntersectsWith(x.Bounds))
                         {
-                            gameTimer.Stop();
-                            playerStats.isGameOver = true;
+                            //gameTimer.Stop();
+                            //playerStats.isGameOver = true;
                             txtScore.Text = "Score: " + score.value + Environment.NewLine + "You were killed in your journey!!";
                         }
                         else
                         {
                             txtScore.Text = "Score: " + score.value + Environment.NewLine + "Collect all the coins";
                         }
+                    }
+
+                    if((string)x.Tag == "lever")
+                    {
+                        CanPress=true;
+                        if(player.Bounds.IntersectsWith(x.Bounds) && playerStats.canPress == true && CanPress == true  && lever.isPushed == false)
+                        {
+                            x.BackColor = Color.Green;
+                            playerStats.canPress = false;
+                            lever.isPushed=true;
+                        }
+
+                        if (player.Bounds.IntersectsWith(x.Bounds) && playerStats.canPress == true && CanPress == true && lever.isPushed == true)
+                        {
+                            x.BackColor = Color.Red;
+                            playerStats.canPress = false;
+                            lever.isPushed=false;
+                        }                  
                     }
                 }
             }
@@ -187,6 +208,35 @@ namespace Client
             }
         }
 
+        //Sets taken coins to invisible from another player and updates score
+        public async Task SendCoinsState_Async(string coinName)
+        {
+
+            if (int.Parse(playerLabel.Text) == 1)
+            {
+                connection.On<string>("secondCoins", (message) =>
+                {
+                    string[] splitedText = message.Split(',');
+                    coins[splitedText[0]].setInvisible();
+                    score.value = Convert.ToInt32(splitedText[1]);
+                    txtScore.Text = "Score: " + score.value;
+                });
+                await connection.SendAsync("GetFirstCoinsStatus", coinName + "," + score.value);
+            }
+            else
+            {
+                connection.On<string>("firstCoins", (message) =>
+                {
+                    string[] splitedText = message.Split(',');
+                    coins[splitedText[0]].setInvisible();
+                    score.value = Convert.ToInt32(splitedText[1]);
+                    txtScore.Text = "Score: " + score.value;
+                });
+                await connection.SendAsync("GetSecondCoinsStatus", coinName + "," + score.value);
+
+            }
+        }
+
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Left)
@@ -228,6 +278,10 @@ namespace Client
                 RestartGame();
             }
 
+            if (e.KeyCode == Keys.A)
+            {
+                playerStats.canPress=true;
+            }
         }
         private void RestartGame()
         {
@@ -258,35 +312,6 @@ namespace Client
             verticalPlatform.Top = 581;
             score.value = 0;
             gameTimer.Start();
-        }
-
-        //Sets taken coins to invisible from another player and updates score
-        public async Task SendCoinsState_Async(string coinName)
-        {
-
-            if (int.Parse(playerLabel.Text) == 1)
-            {
-                connection.On<string>("secondCoins", (message) =>
-                {
-                    string[] splitedText = message.Split(',');
-                    coins[splitedText[0]].setInvisible();
-                    score.value = Convert.ToInt32(splitedText[1]);
-                    txtScore.Text = "Score: " + score.value;
-                });
-                await connection.SendAsync("GetFirstCoinsStatus", coinName + "," + score.value);
-            }
-            else
-            {
-                connection.On<string>("firstCoins", (message) =>
-                {
-                    string[] splitedText = message.Split(',');
-                    coins[splitedText[0]].setInvisible();
-                    score.value = Convert.ToInt32(splitedText[1]);
-                    txtScore.Text = "Score: " + score.value;
-                });
-                await connection.SendAsync("GetSecondCoinsStatus", coinName + "," + score.value);
-
-            }
         }
 
         //Gets all coins pictureBoxes to Dictionary for player
