@@ -74,7 +74,6 @@
             this.pictureBox9 = new System.Windows.Forms.PictureBox();
             this.pictureBox10 = new System.Windows.Forms.PictureBox();
             this.player2 = new System.Windows.Forms.PictureBox();
-            this.SendCordinatesTimer = new System.Windows.Forms.Timer(this.components);
             this.playerLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -601,11 +600,7 @@
             this.player2.TabIndex = 9;
             this.player2.TabStop = false;
             this.player2.Tag = "player2";
-            // 
-            // SendCordinatesTimer
-            // 
-            this.SendCordinatesTimer.Interval = 50;
-            this.SendCordinatesTimer.Tick += new System.EventHandler(this.SendCordinatesTimer_Tick);
+            //
             // 
             // playerLabel
             // 
@@ -775,7 +770,6 @@
         private PictureBox pictureBox9;
         private PictureBox pictureBox10;
         private PictureBox player2;
-        private System.Windows.Forms.Timer SendCordinatesTimer;
         private Label playerLabel;
         private Label label1;
     }

@@ -20,7 +20,6 @@ namespace Client
             DoubleBuffered = true;
             player = player1;
             AsignPlayers();
-            SendCordinatesTimer.Start();
             getCoins();         
         }
 
@@ -159,6 +158,9 @@ namespace Client
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
             }
+
+            SendCordinates_TickAsync();
+            SendCoinsState_Async("");
         }
 
         public async Task SendCordinates_TickAsync()
@@ -226,12 +228,6 @@ namespace Client
                 RestartGame();
             }
 
-        }
-
-        private void SendCordinatesTimer_Tick(object sender, EventArgs e)
-        {
-            SendCordinates_TickAsync();
-            SendCoinsState_Async("");
         }
         private void RestartGame()
         {
