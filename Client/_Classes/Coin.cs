@@ -1,4 +1,4 @@
-﻿namespace Client
+﻿namespace Client._Classes
 {
     public class Coin
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+﻿using Client._Classes;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Client
 {
@@ -8,10 +9,10 @@ namespace Client
 
         GamePlayer playerStats = new(false, false, false, false, 0, 0, 0, 7, 5, 3);
         Enemy enemy = new(3);
-        int playerIndex;
         Dictionary<string, Coin> coins = new Dictionary<string, Coin>();
         Score score = Score.getInstance();
         PictureBox player;
+        bool collected =false;
 
         public Forma()
         {
@@ -20,12 +21,12 @@ namespace Client
             player = player1;
             AsignPlayers();
             SendCordinatesTimer.Start();
-            getCoins();
-
+            getCoins();         
         }
 
         private async void AsignPlayers()
         {
+            int playerIndex;
             connection = new HubConnectionBuilder().WithUrl("https://localhost:7021/gameHub").Build();
             await connection.StartAsync();
             connection.On<string>("asigningPlayers", (message) =>
@@ -104,9 +105,9 @@ namespace Client
                         if (player.Bounds.IntersectsWith(x.Bounds) && x.Visible == true)
                         {
                             coins[x.Name].setInvisible();
-                            SendCoinsState_Async(x.Name);
-                            //Update when coins will have different values
                             score.increaseScore(1);
+                            SendCoinsState_Async(x.Name);
+                            txtScore.Refresh();
                         }
                     }
 
@@ -140,11 +141,11 @@ namespace Client
                 playerStats.verticalSpeed = playerStats.verticalSpeed * -1;
             }
 
-            enemyOne.Left -= enemy.speed;
+            enemyOne.Left -= enemy.Speed;
 
             if (enemyOne.Left < pictureBox5.Left || enemyOne.Left + enemyOne.Width > pictureBox5.Left + pictureBox5.Width)
             {
-                enemy.speed = enemy.speed * -1;
+                enemy.Speed = enemy.Speed * -1;
             }
 
             if (player.Bounds.IntersectsWith(door.Bounds) && playerStats.score == 26)
@@ -154,7 +155,7 @@ namespace Client
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
             }
 
-            if (playerStats.score == 26)
+            if (playerStats.score > 5)
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
             }
@@ -230,8 +231,8 @@ namespace Client
         private void SendCordinatesTimer_Tick(object sender, EventArgs e)
         {
             SendCordinates_TickAsync();
+            SendCoinsState_Async("");
         }
-
         private void RestartGame()
         {
 
@@ -266,6 +267,7 @@ namespace Client
         //Sets taken coins to invisible from another player and updates score
         public async Task SendCoinsState_Async(string coinName)
         {
+
             if (int.Parse(playerLabel.Text) == 1)
             {
                 connection.On<string>("secondCoins", (message) =>
@@ -287,6 +289,7 @@ namespace Client
                     txtScore.Text = "Score: " + score.value;
                 });
                 await connection.SendAsync("GetSecondCoinsStatus", coinName + "," + score.value);
+
             }
         }
 

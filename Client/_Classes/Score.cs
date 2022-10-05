@@ -1,4 +1,4 @@
-﻿namespace Client
+﻿namespace Client._Classes
 {
     //Singleton
     public class Score
@@ -26,7 +26,7 @@
 
         public void increaseScore(int x)
         {
-            value = value + x;
+            value += x;
         }
     }
 }

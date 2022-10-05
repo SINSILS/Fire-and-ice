@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client
+namespace Client._Classes
 {
     public class Enemy
     {
-        public int speed { get; set; }
-        public int damage { get; }
+        public int Speed { get; set; }
+        public int Damage { get; }
 
         public Enemy(int speed)
         {
-            this.speed=speed;
-            this.damage = 1;
+            this.Speed=speed;
+            Damage = 1;
         }
     }
 }
