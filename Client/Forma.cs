@@ -134,7 +134,10 @@ namespace Client
                         {
                             //gameTimer.Stop();
                             //playerStats.isGameOver = true;
-                            txtScore.Text = "Score: " + score.value + Environment.NewLine + "You were killed in your journey!!";
+                            //txtScore.Text = "Score: " + score.value + Environment.NewLine + "You were killed in your journey!!";
+                            player.Left = 593;
+                            player.Top = 564;
+                            playerStats.LowerHealth(enemy.Damage);
                         }
                         else
                         {
@@ -201,6 +204,14 @@ namespace Client
             if (playerStats.score > 5)
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
+            }
+
+            if(playerStats.health == 0)
+            {
+                gameTimer.Stop();
+                playerStats.isGameOver = true;
+                txtScore.Text = "Score: " + score.value + Environment.NewLine + "You were killed in your journey!!";
+                playerStats.health=3;
             }
 
             SendCordinates_TickAsync();

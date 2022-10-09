@@ -25,5 +25,10 @@
             this.verticalSpeed = verticalSpeed;
         }
 
+        public void LowerHealth(int value)
+        {
+            health-=value;
+        }
+
     }
 }
