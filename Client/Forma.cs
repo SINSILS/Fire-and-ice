@@ -1,4 +1,5 @@
 ﻿using Client._Classes;
+using Client._Patterns_Designs;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Client
@@ -18,6 +19,11 @@ namespace Client
 
         Lever lever = new(false);
 
+        ObserverHelper observer1 = new ObserverHelper("Observer I");
+        ObserverHandler provider = new ObserverHandler();
+
+
+
         public Forma()
         {
             InitializeComponent();
@@ -25,6 +31,14 @@ namespace Client
             player = player1;
             AsignPlayers();
             getCoins();
+
+            observer1.Subscribe(provider);
+
+            provider.AddApplication(lever);
+            observer1.List();
+
+            SendLeverState_Async();
+
         }
 
         private async void AsignPlayers()
@@ -137,6 +151,8 @@ namespace Client
 
                             playerStats.canPress = false;
                             lever.isPushed=true;
+                            observer1.List();
+                            SendLeverState_Async();
 
                         }
 
@@ -145,6 +161,9 @@ namespace Client
                             Leveer.BackColor = Color.Red;
                             playerStats.canPress = false;
                             lever.isPushed=false;
+                            observer1.List();
+                            SendLeverState_Async();
+
 
                         }
                     }
@@ -186,7 +205,7 @@ namespace Client
 
             SendCordinates_TickAsync();
             SendCoinsState_Async("");
-            SendLeverState_Async();
+
         }
 
         public async Task SendCordinates_TickAsync()
@@ -257,8 +276,13 @@ namespace Client
                     {
                         Leveer.BackColor=Color.Green;
                     }
+                    if (message=="False")
+                    {
+                        Leveer.BackColor=Color.Red;
+                    }
                 });
                 await connection.SendAsync("GetFirstLeverStatus",lever.isPushed.ToString());
+                await connection.SendAsync("GetSecondLeverStatus",lever.isPushed.ToString());
             }
             else
             {
@@ -270,9 +294,14 @@ namespace Client
                     {
                         Leveer.BackColor=Color.Green;
                     }
+                    if (message=="False")
+                    {
+                        Leveer.BackColor=Color.Red;
+                    }
 
                 });
                 await connection.SendAsync("GetSecondLeverStatus", lever.isPushed.ToString());
+                await connection.SendAsync("GetFirstLeverStatus", lever.isPushed.ToString());
 
             }
         }
