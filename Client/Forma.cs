@@ -2,6 +2,7 @@
 using Client._Classes.AbstractFactories;
 using Client._Classes.AbstractProducts;
 using Client._Classes.Factories;
+using Client._Patterns_Designs;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Client
@@ -22,6 +23,11 @@ namespace Client
         InteractableFactory leverFactory = new LeverFactory();
         Interactable lever;
 
+        ObserverHelper observer1 = new ObserverHelper("Observer I");
+        ObserverHandler provider = new ObserverHandler();
+
+
+
         public Forma()
         {
             InitializeComponent();
@@ -30,6 +36,14 @@ namespace Client
             AsignPlayers();
             getCoins();
             lever = leverFactory.CreateInteractable();
+
+            observer1.Subscribe(provider);
+
+            provider.AddApplication(lever);
+            observer1.List();
+
+            SendLeverState_Async();
+
         }
 
         private async void AsignPlayers()
@@ -125,7 +139,10 @@ namespace Client
                         {
                             //gameTimer.Stop();
                             //playerStats.isGameOver = true;
-                            txtScore.Text = "Score: " + score.value + Environment.NewLine + "You were killed in your journey!!";
+                            //txtScore.Text = "Score: " + score.value + Environment.NewLine + "You were killed in your journey!!";
+                            player.Left = 593;
+                            player.Top = 564;
+                            playerStats.LowerHealth(enemy.Damage);
                         }
                         else
                         {
@@ -142,6 +159,10 @@ namespace Client
 
                             playerStats.canPress = false;
                             lever.SetActivated(true);
+                            lever.isPushed=true;
+                            observer1.List();
+                            SendLeverState_Async();
+
                         }
 
                         if (player.Bounds.IntersectsWith(x.Bounds) && playerStats.canPress == true && CanPress == true && lever.isActivated == true)
@@ -149,6 +170,11 @@ namespace Client
                             Leveer.BackColor = Color.Red;
                             playerStats.canPress = false;
                             lever.SetActivated(false);
+                            lever.isPushed=false;
+                            observer1.List();
+                            SendLeverState_Async();
+
+
                         }
                     }
                 }
@@ -187,9 +213,17 @@ namespace Client
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
             }
 
+            if(playerStats.health == 0)
+            {
+                gameTimer.Stop();
+                playerStats.isGameOver = true;
+                txtScore.Text = "Score: " + score.value + Environment.NewLine + "You were killed in your journey!!";
+                playerStats.health=3;
+            }
+
             SendCordinates_TickAsync();
             SendCoinsState_Async("");
-            SendLeverState_Async();
+
         }
 
         public async Task SendCordinates_TickAsync()
@@ -260,8 +294,14 @@ namespace Client
                     {
                         Leveer.BackColor = Color.Green;
                     }
+                    if (message=="False")
+                    {
+                        Leveer.BackColor=Color.Red;
+                    }
                 });
                 await connection.SendAsync("GetFirstLeverStatus", lever.isActivated.ToString());
+                await connection.SendAsync("GetFirstLeverStatus",lever.isPushed.ToString());
+                await connection.SendAsync("GetSecondLeverStatus",lever.isPushed.ToString());
             }
             else
             {
@@ -273,9 +313,15 @@ namespace Client
                     {
                         Leveer.BackColor = Color.Green;
                     }
+                    if (message=="False")
+                    {
+                        Leveer.BackColor=Color.Red;
+                    }
 
                 });
                 await connection.SendAsync("GetSecondLeverStatus", lever.isActivated.ToString());
+                await connection.SendAsync("GetSecondLeverStatus", lever.isPushed.ToString());
+                await connection.SendAsync("GetFirstLeverStatus", lever.isPushed.ToString());
 
             }
         }
