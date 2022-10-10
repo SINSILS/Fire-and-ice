@@ -159,7 +159,6 @@ namespace Client
 
                             playerStats.canPress = false;
                             lever.SetActivated(true);
-                            lever.isPushed=true;
                             observer1.List();
                             SendLeverState_Async();
 
@@ -170,7 +169,6 @@ namespace Client
                             Leveer.BackColor = Color.Red;
                             playerStats.canPress = false;
                             lever.SetActivated(false);
-                            lever.isPushed=false;
                             observer1.List();
                             SendLeverState_Async();
 
@@ -213,12 +211,12 @@ namespace Client
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
             }
 
-            if(playerStats.health == 0)
+            if (playerStats.health == 0)
             {
                 gameTimer.Stop();
                 playerStats.isGameOver = true;
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "You were killed in your journey!!";
-                playerStats.health=3;
+                playerStats.health = 3;
             }
 
             SendCordinates_TickAsync();
@@ -294,14 +292,13 @@ namespace Client
                     {
                         Leveer.BackColor = Color.Green;
                     }
-                    if (message=="False")
+                    if (message == "False")
                     {
-                        Leveer.BackColor=Color.Red;
+                        Leveer.BackColor = Color.Red;
                     }
                 });
                 await connection.SendAsync("GetFirstLeverStatus", lever.isActivated.ToString());
-                await connection.SendAsync("GetFirstLeverStatus",lever.isPushed.ToString());
-                await connection.SendAsync("GetSecondLeverStatus",lever.isPushed.ToString());
+                await connection.SendAsync("GetSecondLeverStatus", lever.isActivated.ToString());
             }
             else
             {
@@ -313,15 +310,14 @@ namespace Client
                     {
                         Leveer.BackColor = Color.Green;
                     }
-                    if (message=="False")
+                    if (message == "False")
                     {
-                        Leveer.BackColor=Color.Red;
+                        Leveer.BackColor = Color.Red;
                     }
 
                 });
                 await connection.SendAsync("GetSecondLeverStatus", lever.isActivated.ToString());
-                await connection.SendAsync("GetSecondLeverStatus", lever.isPushed.ToString());
-                await connection.SendAsync("GetFirstLeverStatus", lever.isPushed.ToString());
+                await connection.SendAsync("GetFirstLeverStatus", lever.isActivated.ToString());
 
             }
         }
