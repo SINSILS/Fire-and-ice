@@ -1,4 +1,7 @@
 ﻿using Client._Classes;
+using Client._Classes.AbstractFactories;
+using Client._Classes.AbstractProducts;
+using Client._Classes.Factories;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Client
@@ -16,7 +19,8 @@ namespace Client
         bool CanPress;
         string temp, temp2;
 
-        Lever lever = new(false);
+        InteractableFactory leverFactory = new LeverFactory();
+        Interactable lever;
 
         public Forma()
         {
@@ -25,6 +29,7 @@ namespace Client
             player = player1;
             AsignPlayers();
             getCoins();
+            lever = leverFactory.CreateInteractable();
         }
 
         private async void AsignPlayers()
@@ -130,22 +135,20 @@ namespace Client
 
                     if ((string)x.Tag == "lever")
                     {
-                        CanPress=true;
-                        if (player.Bounds.IntersectsWith(x.Bounds) && playerStats.canPress == true && CanPress == true  && lever.isPushed == false)
+                        CanPress = true;
+                        if (player.Bounds.IntersectsWith(x.Bounds) && playerStats.canPress == true && CanPress == true && lever.isActivated == false)
                         {
-                            Leveer.BackColor= Color.Green;
+                            Leveer.BackColor = Color.Green;
 
                             playerStats.canPress = false;
-                            lever.isPushed=true;
-
+                            lever.SetActivated(true);
                         }
 
-                        if (player.Bounds.IntersectsWith(x.Bounds) && playerStats.canPress == true && CanPress == true && lever.isPushed == true)
+                        if (player.Bounds.IntersectsWith(x.Bounds) && playerStats.canPress == true && CanPress == true && lever.isActivated == true)
                         {
                             Leveer.BackColor = Color.Red;
                             playerStats.canPress = false;
-                            lever.isPushed=false;
-
+                            lever.SetActivated(false);
                         }
                     }
                 }
@@ -253,12 +256,12 @@ namespace Client
                 {
                     string[] splitedText = message.Split(',');
                     temp = message;
-                    if (message=="True")
+                    if (message == "True")
                     {
-                        Leveer.BackColor=Color.Green;
+                        Leveer.BackColor = Color.Green;
                     }
                 });
-                await connection.SendAsync("GetFirstLeverStatus",lever.isPushed.ToString());
+                await connection.SendAsync("GetFirstLeverStatus", lever.isActivated.ToString());
             }
             else
             {
@@ -266,13 +269,13 @@ namespace Client
                 {
                     string[] splitedText = message.Split(',');
                     temp2 = message;
-                    if (message=="True")
+                    if (message == "True")
                     {
-                        Leveer.BackColor=Color.Green;
+                        Leveer.BackColor = Color.Green;
                     }
 
                 });
-                await connection.SendAsync("GetSecondLeverStatus", lever.isPushed.ToString());
+                await connection.SendAsync("GetSecondLeverStatus", lever.isActivated.ToString());
 
             }
         }
@@ -320,7 +323,7 @@ namespace Client
 
             if (e.KeyCode == Keys.A)
             {
-                playerStats.canPress=true;
+                playerStats.canPress = true;
             }
         }
         private void RestartGame()
