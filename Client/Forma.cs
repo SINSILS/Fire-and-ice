@@ -18,7 +18,6 @@ namespace Client
         PictureBox player;
 
         bool CanPress;
-        string temp, temp2;
 
         InteractableFactory leverFactory = new LeverFactory();
         Interactable lever;
@@ -257,9 +256,12 @@ namespace Client
                 connection.On<string>("secondCoins", (message) =>
                 {
                     string[] splitedText = message.Split(',');
-                    coins[splitedText[0]].setInvisible();
-                    score.value = Convert.ToInt32(splitedText[1]);
-                    txtScore.Text = "Score: " + score.value;
+                    if (message != "")
+                    {
+                        coins[splitedText[0]].setInvisible();
+                        score.value = Convert.ToInt32(splitedText[1]);
+                        txtScore.Text = "Score: " + score.value;
+                    }
                 });
                 await connection.SendAsync("GetFirstCoinsStatus", coinName + "," + score.value);
             }
@@ -268,9 +270,12 @@ namespace Client
                 connection.On<string>("firstCoins", (message) =>
                 {
                     string[] splitedText = message.Split(',');
-                    coins[splitedText[0]].setInvisible();
-                    score.value = Convert.ToInt32(splitedText[1]);
-                    txtScore.Text = "Score: " + score.value;
+                    if (message != "")
+                    {
+                        coins[splitedText[0]].setInvisible();
+                        score.value = Convert.ToInt32(splitedText[1]);
+                        txtScore.Text = "Score: " + score.value;
+                    }
                 });
                 await connection.SendAsync("GetSecondCoinsStatus", coinName + "," + score.value);
 
@@ -281,7 +286,8 @@ namespace Client
 
         public async Task SendLeverState_Async()
         {
-
+            var temp="";
+            var temp2="";
             if (int.Parse(playerLabel.Text) == 1)
             {
                 connection.On<string>("secondLever", (message) =>
@@ -298,7 +304,7 @@ namespace Client
                     }
                 });
                 await connection.SendAsync("GetFirstLeverStatus", lever.isActivated.ToString());
-                await connection.SendAsync("GetSecondLeverStatus", lever.isActivated.ToString());
+                //await connection.SendAsync("GetSecondLeverStatus", lever.isActivated.ToString());
             }
             else
             {
@@ -317,7 +323,7 @@ namespace Client
 
                 });
                 await connection.SendAsync("GetSecondLeverStatus", lever.isActivated.ToString());
-                await connection.SendAsync("GetFirstLeverStatus", lever.isActivated.ToString());
+                //await connection.SendAsync("GetFirstLeverStatus", lever.isActivated.ToString());
 
             }
         }

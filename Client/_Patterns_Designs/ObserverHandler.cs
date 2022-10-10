@@ -1,4 +1,6 @@
 ﻿using Client._Classes;
+using Client._Classes.AbstractProducts;
+using Client._Classes.ConcreteProducts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +11,15 @@ namespace Client._Patterns_Designs
 {
     public class ObserverHandler
     {
-        private readonly List<IObserver<Lever>> _observers;
-        public List<Lever> Levers { get; set; }
+        private readonly List<IObserver<Interactable>> _observers;
+        public List<Interactable> Levers { get; set; }
         public ObserverHandler()
         {
             _observers = new();
             Levers = new();
         }
 
-        public IDisposable Subscribe(IObserver<Lever> observer)
+        public IDisposable Subscribe(IObserver<Interactable> observer)
         {
             if (!_observers.Contains(observer))
             {
@@ -27,7 +29,7 @@ namespace Client._Patterns_Designs
             }
             return new Unsubscriber(_observers, observer);
         }
-        public void AddApplication(Lever app)
+        public void AddApplication(Interactable app)
         {
             Levers.Add(app);
             foreach (var observer in _observers)
@@ -43,9 +45,9 @@ namespace Client._Patterns_Designs
 
     public class Unsubscriber : IDisposable
     {
-        private readonly List<IObserver<Lever>> _observers;
-        private readonly IObserver<Lever> _observer;
-        public Unsubscriber(List<IObserver<Lever>> observers, IObserver<Lever> observer)
+        private readonly List<IObserver<Interactable>> _observers;
+        private readonly IObserver<Interactable> _observer;
+        public Unsubscriber(List<IObserver<Interactable>> observers, IObserver<Interactable> observer)
         {
             _observers = observers;
             _observer = observer;
