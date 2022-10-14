@@ -77,6 +77,8 @@
             this.playerLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.Leveer = new System.Windows.Forms.PictureBox();
+            this.pictureBox37 = new System.Windows.Forms.PictureBox();
+            this.obstacle = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -120,6 +122,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Leveer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox37)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.obstacle)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -636,12 +640,36 @@
             this.Leveer.TabStop = false;
             this.Leveer.Tag = "lever";
             // 
+            // pictureBox37
+            // 
+            this.pictureBox37.BackColor = System.Drawing.Color.Maroon;
+            this.pictureBox37.Location = new System.Drawing.Point(661, 346);
+            this.pictureBox37.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.pictureBox37.Name = "pictureBox37";
+            this.pictureBox37.Size = new System.Drawing.Size(148, 35);
+            this.pictureBox37.TabIndex = 13;
+            this.pictureBox37.TabStop = false;
+            this.pictureBox37.Tag = "platform";
+            // 
+            // obstacle
+            // 
+            this.obstacle.BackColor = System.Drawing.Color.Peru;
+            this.obstacle.Location = new System.Drawing.Point(675, 302);
+            this.obstacle.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.obstacle.Name = "obstacle";
+            this.obstacle.Size = new System.Drawing.Size(35, 46);
+            this.obstacle.TabIndex = 14;
+            this.obstacle.TabStop = false;
+            this.obstacle.Tag = "obstacle";
+            // 
             // Forma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightBlue;
             this.ClientSize = new System.Drawing.Size(922, 632);
+            this.Controls.Add(this.obstacle);
+            this.Controls.Add(this.pictureBox37);
             this.Controls.Add(this.Leveer);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.playerLabel);
@@ -736,6 +764,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Leveer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox37)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.obstacle)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -789,5 +819,7 @@
         private Label playerLabel;
         private Label label1;
         private PictureBox Leveer;
+        private PictureBox pictureBox37;
+        private PictureBox obstacle;
     }
 }

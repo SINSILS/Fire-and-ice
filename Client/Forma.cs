@@ -25,6 +25,25 @@ namespace Client
         ObserverHelper observer1 = new ObserverHelper("Observer I");
         ObserverHandler provider = new ObserverHandler();
 
+        Obstacle obs, clone;
+
+        //PictureBox picture = new PictureBox
+        //{
+        //    BackColor=Color.Black,
+        //    Size = new Size(40, 40),
+        //    Location = new Point(375, 372),
+        //    Tag="obstacle"
+
+        //};
+
+        //PictureBox picture2 = new PictureBox
+        //{
+        //    BackColor=Color.DeepPink,
+        //    Size = new Size(40, 40),
+        //    Location = new Point(400, 400),
+        //    Tag="obstacle",
+        //};
+
 
 
         public Forma()
@@ -40,8 +59,16 @@ namespace Client
 
             provider.AddApplication(lever);
             observer1.List();
-
             SendLeverState_Async();
+
+
+            PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300, "obstacle", "obs1");
+            PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350, "obstacle", "obs2");
+
+            obs=new(a, 5);
+
+            clone = (Obstacle)obs.Clone();
+            clone.pic=b;
 
         }
 
@@ -143,10 +170,20 @@ namespace Client
                             player.Top = 564;
                             playerStats.LowerHealth(enemy.Damage);
                         }
-                        else
+                    }
+
+                    if ((string)x.Tag == "obstacle")
+                    {
+                        if (player.Bounds.IntersectsWith(x.Bounds))
                         {
-                            txtScore.Text = "Score: " + score.value + Environment.NewLine + "Collect all the coins";
+                            //gameTimer.Stop();
+                            //playerStats.isGameOver = true;
+                            //txtScore.Text = "Score: " + score.value + Environment.NewLine + "You were killed in your journey!!";
+                            player.Left = 593;
+                            player.Top = 564;
+                            playerStats.LowerHealth(clone.Damage);
                         }
+
                     }
 
                     if ((string)x.Tag == "lever")
@@ -210,7 +247,13 @@ namespace Client
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
             }
 
-            if (playerStats.health == 0)
+            if (playerStats.score < 5)
+            {
+                txtScore.Text = "Score: " + score.value + Environment.NewLine + "Collect coins to complete the quest!";
+            }
+
+
+            if (playerStats.health <= 0)
             {
                 gameTimer.Stop();
                 playerStats.isGameOver = true;
@@ -220,6 +263,7 @@ namespace Client
 
             SendCordinates_TickAsync();
             SendCoinsState_Async("");
+
 
         }
 
@@ -416,6 +460,21 @@ namespace Client
                     coins.Add(x.Name, coin);
                 }
             }
+        }
+
+        public PictureBox CreatePicBoxDyn(Color color, int xsize, int ysize, int locationx, int locationy, string tag,string name)
+        {
+            var picture = new PictureBox
+            {
+                Name =name,
+                BackColor=color,
+                Size = new Size(xsize, ysize),
+                Location = new Point(locationx, locationy),
+                Tag=tag
+            };
+            Controls.Add(picture);
+            picture.Show();
+            return picture;
         }
     }
 }
