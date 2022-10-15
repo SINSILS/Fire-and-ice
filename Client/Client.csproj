@@ -28,6 +28,10 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="_Patterns_Designs\_Strategy_Patern\" />
+  </ItemGroup>
+
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
 
 </Project>

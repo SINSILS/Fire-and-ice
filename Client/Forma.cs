@@ -3,6 +3,7 @@ using Client._Classes.AbstractFactories;
 using Client._Classes.AbstractProducts;
 using Client._Classes.Factories;
 using Client._Patterns_Designs;
+using Client._Patterns_Designs._Strategy_Patern;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Client
@@ -11,7 +12,7 @@ namespace Client
     {
         private HubConnection connection;
 
-        GamePlayer playerStats = new(3, false, false, false, false, 0, 0, 0, 7, 5, 3);
+        GamePlayer playerStats = new(3, false, false, false, false, 0, 0, 5, 3);
         Enemy enemy = new(3);
         Dictionary<string, Coin> coins = new Dictionary<string, Coin>();
         Score score = Score.getInstance();
@@ -85,6 +86,9 @@ namespace Client
                     playerLabel.Text = message;
                     label1.Text = "Ice Girl";
                     player = player1;
+                    ////cia galima pakeist: new NormalMovement() arba new SlowedMovement()
+                    playerStats.SetMovement(new EnhancedMovement());
+                    playerStats.MovementAction();
 
                 }
                 else
@@ -93,6 +97,9 @@ namespace Client
                     playerLabel.Text = message;
                     label1.Text = "Fire Boy";
                     player = player2;
+                    ////cia pakeist: new EnhancedMovement() arba new SlowedMovement()
+                    playerStats.SetMovement(new NormalMovement());
+                    playerStats.MovementAction();
                 }
             });
             await connection.SendAsync("AsignPlayer", "");
@@ -102,15 +109,15 @@ namespace Client
         {
             txtScore.Text = "Score: " + score.value;
 
-            player.Top += playerStats.jumpSpeed;
+            player.Top += GamePlayer.jumpSpeed;
 
             if (playerStats.goLeft == true)
             {
-                player.Left -= playerStats.playerSpeed;
+                player.Left -= GamePlayer.playerSpeed;
             }
             if (playerStats.goRight == true)
             {
-                player.Left += playerStats.playerSpeed;
+                player.Left += GamePlayer.playerSpeed;
             }
 
             if (playerStats.jumping == true && playerStats.force < 0)
@@ -120,13 +127,14 @@ namespace Client
 
             if (playerStats.jumping == true)
             {
-                playerStats.jumpSpeed = -8;
+                playerStats.MovementAction();
                 playerStats.force -= 1;
             }
             else
             {
-                playerStats.jumpSpeed = 10;
+                GamePlayer.jumpSpeed = 10;
             }
+
             foreach (Control x in this.Controls)
             {
                 if (x is PictureBox)
@@ -460,6 +468,11 @@ namespace Client
                     coins.Add(x.Name, coin);
                 }
             }
+        }
+
+        private void Forma_Load(object sender, EventArgs e)
+        {
+
         }
 
         public PictureBox CreatePicBoxDyn(Color color, int xsize, int ysize, int locationx, int locationy, string tag,string name)
