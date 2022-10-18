@@ -66,10 +66,10 @@ namespace Client
             PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300, "obstacle", "obs1");
             PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350, "obstacle", "obs2");
 
-            obs=new(a, 5);
+            obs = new(a, 5);
 
             clone = (Obstacle)obs.Clone();
-            clone.pic=b;
+            clone.pic = b;
 
         }
 
@@ -308,7 +308,7 @@ namespace Client
                 connection.On<string>("secondCoins", (message) =>
                 {
                     string[] splitedText = message.Split(',');
-                    if (message != "")
+                    if (message != "" && coins.ContainsKey(splitedText[0]))
                     {
                         coins[splitedText[0]].setInvisible();
                         score.value = Convert.ToInt32(splitedText[1]);
@@ -322,7 +322,7 @@ namespace Client
                 connection.On<string>("firstCoins", (message) =>
                 {
                     string[] splitedText = message.Split(',');
-                    if (message != "")
+                    if (message != "" && coins.ContainsKey(splitedText[0]))
                     {
                         coins[splitedText[0]].setInvisible();
                         score.value = Convert.ToInt32(splitedText[1]);
@@ -338,8 +338,8 @@ namespace Client
 
         public async Task SendLeverState_Async()
         {
-            var temp="";
-            var temp2="";
+            var temp = "";
+            var temp2 = "";
             if (int.Parse(playerLabel.Text) == 1)
             {
                 connection.On<string>("secondLever", (message) =>
@@ -470,20 +470,15 @@ namespace Client
             }
         }
 
-        private void Forma_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        public PictureBox CreatePicBoxDyn(Color color, int xsize, int ysize, int locationx, int locationy, string tag,string name)
+        public PictureBox CreatePicBoxDyn(Color color, int xsize, int ysize, int locationx, int locationy, string tag, string name)
         {
             var picture = new PictureBox
             {
-                Name =name,
-                BackColor=color,
+                Name = name,
+                BackColor = color,
                 Size = new Size(xsize, ysize),
                 Location = new Point(locationx, locationy),
-                Tag=tag
+                Tag = tag
             };
             Controls.Add(picture);
             picture.Show();

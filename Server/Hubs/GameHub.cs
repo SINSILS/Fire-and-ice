@@ -148,12 +148,12 @@ namespace Server.Hubs
         public async Task GetFirstLeverStatus(string message)
         {
             await Clients.All.SendAsync("firstLever", message);
-           Console.WriteLine($"1 Lever: {message}");
+            Console.WriteLine($"1 Lever: {message}");
         }
         public async Task GetSecondLeverStatus(string message)
         {
             await Clients.All.SendAsync("secondLever", message);
-           Console.WriteLine($"2 Lever: {message}");
+            Console.WriteLine($"2 Lever: {message}");
         }
     }
 }
@@ -169,3 +169,14 @@ namespace Server.Hubs
 //Factory - platformos - T
 //Strategy - movement - M
 //Observer - apie communication - B
+
+//2022-10-18
+//Komandos - M
+//Dekoratorius - B
+
+//Fasadas
+//Breach
+//Adapteris
+
+// MagicDraw'e bendra diagrama (folderiai ir pns - viskas)
+//I ataskaita bus dedamos kiekvieno sablono diagrama su susijusiomis klasemis
