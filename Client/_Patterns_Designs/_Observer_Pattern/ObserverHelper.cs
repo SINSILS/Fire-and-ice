@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client._Patterns_Designs
+namespace Client._Patterns_Designs.Observer
 {
     public class ObserverHelper : IObserver<Interactable>
     {

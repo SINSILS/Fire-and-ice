@@ -2,8 +2,9 @@
 using Client._Classes.AbstractFactories;
 using Client._Classes.AbstractProducts;
 using Client._Classes.Factories;
-using Client._Patterns_Designs;
+using Client._Patterns_Designs._Decorator_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
+using Client._Patterns_Designs.Observer;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Client
@@ -28,24 +29,7 @@ namespace Client
 
         Obstacle obs, clone;
 
-        //PictureBox picture = new PictureBox
-        //{
-        //    BackColor=Color.Black,
-        //    Size = new Size(40, 40),
-        //    Location = new Point(375, 372),
-        //    Tag="obstacle"
-
-        //};
-
-        //PictureBox picture2 = new PictureBox
-        //{
-        //    BackColor=Color.DeepPink,
-        //    Size = new Size(40, 40),
-        //    Location = new Point(400, 400),
-        //    Tag="obstacle",
-        //};
-
-
+        int speed;
 
         public Forma()
         {
@@ -63,14 +47,28 @@ namespace Client
             SendLeverState_Async();
 
 
-            PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300, "obstacle", "obs1");
-            PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350, "obstacle", "obs2");
+            PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300);
+            PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350);
 
+            PictureBox platform = CreatePicBoxDyn(Color.AliceBlue, 148, 35, 699, 500);
+            a.Tag="obstacle";
+            b.Tag="obstacle";
             obs = new(a, 5);
 
             clone = (Obstacle)obs.Clone();
             clone.pic = b;
 
+            IPlatform createdPlatform = new Platform(platform);
+            createdPlatform.CreatePlatform();
+
+            HorizontalPlatformDecorator horizontal = new HorizontalPlatformDecorator(createdPlatform);
+            horizontal.CreatePlatform();
+            speed=horizontal.Speed;
+
+
+            IPlatform createdPlatform2 = new Platform();
+            VerticalPlatformDecorator vertical= new VerticalPlatformDecorator(createdPlatform2);
+            vertical.CreatePlatform();
         }
 
         private async void AsignPlayers()
@@ -156,6 +154,18 @@ namespace Client
                         x.BringToFront();
                     }
 
+                    if ((string)x.Tag == "Horizontal")
+                    {
+                        if (player.Bounds.IntersectsWith(x.Bounds))
+                        {
+                            playerStats.force = 8;
+                            player.Top = x.Top - player.Height;
+                                player.Left -= playerStats.horizontalSpeed;
+                        }
+
+                        x.BringToFront();
+                    }
+
                     if ((string)x.Tag == "coin")
                     {
                         if (player.Bounds.IntersectsWith(x.Bounds) && x.Visible == true)
@@ -221,12 +231,24 @@ namespace Client
                     }
                 }
             }
+            //horizontalPlatform.Left -= playerStats.horizontalSpeed;
 
-            horizontalPlatform.Left -= playerStats.horizontalSpeed;
+            //if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
+            //{
+            //    playerStats.horizontalSpeed = playerStats.horizontalSpeed * -1;
+            //}
 
-            if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
+            foreach (var pb in this.Controls
+                                .OfType<PictureBox>()
+                                .Where(x => (string)x.Tag == "Horizontal")
+                                .ToList())
             {
-                playerStats.horizontalSpeed = playerStats.horizontalSpeed * -1;
+                pb.Left -= speed;
+
+                if (pb.Left < 0 || pb.Left + pb.Width > this.ClientSize.Width)
+                {
+                    playerStats.horizontalSpeed = playerStats.horizontalSpeed * -1;
+                }
             }
 
             verticalPlatform.Top += playerStats.verticalSpeed * -1;
@@ -470,15 +492,13 @@ namespace Client
             }
         }
 
-        public PictureBox CreatePicBoxDyn(Color color, int xsize, int ysize, int locationx, int locationy, string tag, string name)
+        public PictureBox CreatePicBoxDyn(Color color, int xsize, int ysize, int locationx, int locationy)
         {
             var picture = new PictureBox
             {
-                Name = name,
                 BackColor = color,
                 Size = new Size(xsize, ysize),
-                Location = new Point(locationx, locationy),
-                Tag = tag
+                Location = new Point(locationx, locationy)
             };
             Controls.Add(picture);
             picture.Show();
