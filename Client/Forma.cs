@@ -6,6 +6,7 @@ using Client._Patterns_Designs._Decorator_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
 using Client._Patterns_Designs.Observer;
 using Microsoft.AspNetCore.SignalR.Client;
+using System.Runtime.InteropServices;
 
 namespace Client
 {
@@ -47,16 +48,32 @@ namespace Client
             SendLeverState_Async();
 
 
-            PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300);
-            PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350);
+            PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300,"obstacle");
+            PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350, "obstacle");
 
-            PictureBox platform = CreatePicBoxDyn(Color.AliceBlue, 148, 35, 699, 500);
-            a.Tag="obstacle";
-            b.Tag="obstacle";
+            PictureBox platform = CreatePicBoxDyn(Color.AliceBlue, 148, 35, 699, 500, "platform");
             obs = new(a, 5);
 
-            clone = (Obstacle)obs.Clone();
+            GCHandle objHandle = GCHandle.Alloc(obs, GCHandleType.WeakTrackResurrection);
+            long address = GCHandle.ToIntPtr(objHandle).ToInt64();
+
+            Console.WriteLine("Adress of first obstacle: "+ address.ToString());
+
+            Console.WriteLine("Obstacle 1 damage: " + obs.Damage.ToString());
+            clone = (Obstacle)obs.DeepCopy();
+
+            GCHandle objHandle1 = GCHandle.Alloc(clone, GCHandleType.WeakTrackResurrection);
+            long address1 = GCHandle.ToIntPtr(objHandle1).ToInt64();
+            Console.WriteLine("Adress of cloned:"+ address1.ToString());
+
             clone.pic = b;
+
+
+            b.Tag="clone";
+            clone.Damage=0;
+            Console.WriteLine("Cloned obstacle damage: " +clone.Damage.ToString());
+
+
 
             IPlatform createdPlatform = new Platform(platform);
             createdPlatform.CreatePlatform();
@@ -191,6 +208,20 @@ namespace Client
                     }
 
                     if ((string)x.Tag == "obstacle")
+                    {
+                        if (player.Bounds.IntersectsWith(x.Bounds))
+                        {
+                            //gameTimer.Stop();
+                            //playerStats.isGameOver = true;
+                            //txtScore.Text = "Score: " + score.value + Environment.NewLine + "You were killed in your journey!!";
+                            player.Left = 593;
+                            player.Top = 564;
+                            playerStats.LowerHealth(obs.Damage);
+                        }
+
+                    }
+
+                    if ((string)x.Tag == "clone")
                     {
                         if (player.Bounds.IntersectsWith(x.Bounds))
                         {
@@ -492,13 +523,14 @@ namespace Client
             }
         }
 
-        public PictureBox CreatePicBoxDyn(Color color, int xsize, int ysize, int locationx, int locationy)
+        public PictureBox CreatePicBoxDyn(Color color, int xsize, int ysize, int locationx, int locationy, string tag)
         {
             var picture = new PictureBox
             {
                 BackColor = color,
                 Size = new Size(xsize, ysize),
-                Location = new Point(locationx, locationy)
+                Location = new Point(locationx, locationy),
+                Tag= tag
             };
             Controls.Add(picture);
             picture.Show();

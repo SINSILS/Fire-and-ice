@@ -23,5 +23,12 @@ namespace Client._Classes
         {
             return (Obstacle) MemberwiseClone();
         }
+
+        public Obstacle DeepCopy()
+        {
+            Obstacle DeepCopyObstacle = new Obstacle(this.pic,
+                                this.Damage);
+            return DeepCopyObstacle;
+        }
     }
 }
