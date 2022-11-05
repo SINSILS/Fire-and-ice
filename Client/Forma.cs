@@ -22,7 +22,7 @@ namespace Client
 
         bool CanPress;
 
-        InteractableFactory leverFactory = new LeverFactory();
+        InteractableFactory levelFactory = new Level1Factory();
         Interactable lever;
 
         ObserverHelper observer1 = new ObserverHelper("Observer I");
@@ -39,7 +39,7 @@ namespace Client
             player = player1;
             AsignPlayers();
             getCoins();
-            lever = leverFactory.CreateInteractable();
+            lever = levelFactory.CreateInteractableLever();
 
             observer1.Subscribe(provider);
 

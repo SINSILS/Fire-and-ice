@@ -2,8 +2,9 @@
 
 namespace Client._Classes.AbstractFactories
 {
-    public abstract class InteractableFactory
+    public abstract class LevelFactory
     {
-        public abstract Interactable CreateInteractable();
-    }
+        public abstract Interactable CreateInteractableLever();
+        public abstract Interactable CreateInteractablePressurePlate();
+    }   
 }
