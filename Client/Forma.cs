@@ -15,7 +15,7 @@ namespace Client
         private HubConnection connection;
 
         GamePlayer playerStats = new(3, false, false, false, false, 0, 0, 5, 3);
-        Enemy enemy = new(3);
+        Enemy enemy = EnemyFactory.getEnemy("SpeedDemon");
         Dictionary<string, Coin> coins = new Dictionary<string, Coin>();
         Score score = Score.getInstance();
         PictureBox player;
