@@ -4,7 +4,7 @@ namespace Client._Classes.ConcreteProducts
 {
     public class PressurePlate : Interactable
     {
-        public PressurePlate(bool isActivated = false, string color)
+        public PressurePlate(string color, bool isActivated = false)
         {
             this.isActivated = isActivated;
             this.color = color;

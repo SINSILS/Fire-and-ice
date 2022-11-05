@@ -22,7 +22,7 @@ namespace Client
 
         bool CanPress;
 
-        InteractableFactory levelFactory = new Level1Factory();
+        LevelFactory levelFactory = new Level1Factory();
         Interactable lever;
 
         ObserverHelper observer1 = new ObserverHelper("Observer I");
@@ -48,7 +48,7 @@ namespace Client
             SendLeverState_Async();
 
 
-            PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300,"obstacle");
+            PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300, "obstacle");
             PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350, "obstacle");
 
             PictureBox platform = CreatePicBoxDyn(Color.AliceBlue, 148, 35, 699, 500, "platform");
@@ -57,21 +57,21 @@ namespace Client
             GCHandle objHandle = GCHandle.Alloc(obs, GCHandleType.WeakTrackResurrection);
             long address = GCHandle.ToIntPtr(objHandle).ToInt64();
 
-            Console.WriteLine("Adress of first obstacle: "+ address.ToString());
+            Console.WriteLine("Adress of first obstacle: " + address.ToString());
 
             Console.WriteLine("Obstacle 1 damage: " + obs.Damage.ToString());
             clone = (Obstacle)obs.DeepCopy();
 
             GCHandle objHandle1 = GCHandle.Alloc(clone, GCHandleType.WeakTrackResurrection);
             long address1 = GCHandle.ToIntPtr(objHandle1).ToInt64();
-            Console.WriteLine("Adress of cloned:"+ address1.ToString());
+            Console.WriteLine("Adress of cloned:" + address1.ToString());
 
             clone.pic = b;
 
 
-            b.Tag="clone";
-            clone.Damage=0;
-            Console.WriteLine("Cloned obstacle damage: " +clone.Damage.ToString());
+            b.Tag = "clone";
+            clone.Damage = 0;
+            Console.WriteLine("Cloned obstacle damage: " + clone.Damage.ToString());
 
 
 
@@ -80,11 +80,11 @@ namespace Client
 
             HorizontalPlatformDecorator horizontal = new HorizontalPlatformDecorator(createdPlatform);
             horizontal.CreatePlatform();
-            speed=horizontal.Speed;
+            speed = horizontal.Speed;
 
 
             IPlatform createdPlatform2 = new Platform();
-            VerticalPlatformDecorator vertical= new VerticalPlatformDecorator(createdPlatform2);
+            VerticalPlatformDecorator vertical = new VerticalPlatformDecorator(createdPlatform2);
             vertical.CreatePlatform();
         }
 
@@ -177,7 +177,7 @@ namespace Client
                         {
                             playerStats.force = 8;
                             player.Top = x.Top - player.Height;
-                                player.Left -= playerStats.horizontalSpeed;
+                            player.Left -= playerStats.horizontalSpeed;
                         }
 
                         x.BringToFront();
@@ -530,7 +530,7 @@ namespace Client
                 BackColor = color,
                 Size = new Size(xsize, ysize),
                 Location = new Point(locationx, locationy),
-                Tag= tag
+                Tag = tag
             };
             Controls.Add(picture);
             picture.Show();

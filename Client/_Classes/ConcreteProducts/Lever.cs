@@ -4,7 +4,7 @@ namespace Client._Classes.ConcreteProducts
 {
     public class Lever : Interactable
     {
-        public Lever(bool isActivated = false, string color)
+        public Lever(string color, bool isActivated = false)
         {
             this.isActivated = isActivated;
             this.color = color;

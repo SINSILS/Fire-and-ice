@@ -2,17 +2,8 @@
 {
     public abstract class Interactable
     {
-        enum Color
-        {
-            Red,
-            Blue,
-            None
-        }
-        
         public bool isActivated { get; set; }
-        public Color color {get; set;}
-
-        public 
+        public string? color { get; set; }
 
         public void SetActivated(bool state)
         {

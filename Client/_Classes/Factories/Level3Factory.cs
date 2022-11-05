@@ -4,14 +4,14 @@ using Client._Classes.ConcreteProducts;
 
 namespace Client._Classes.Factories
 {
-    public class LeverFactory : InteractableFactory
+    public class Level3Factory : LevelFactory
     {
-        public override CreateInteractableLever()
+        public override Interactable CreateInteractableLever()
         {
             return new Lever("Blue");
         }
 
-        public override CreateInteractablePressurePlate()
+        public override Interactable CreateInteractablePressurePlate()
         {
             return new PressurePlate("Red");
         }
