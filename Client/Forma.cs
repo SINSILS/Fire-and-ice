@@ -355,7 +355,7 @@ namespace Client
 
             SendCordinates_TickAsync();
             SendCoinsState_Async("");
-
+            SendPowerUpState_Async("");
 
         }
 
@@ -389,7 +389,10 @@ namespace Client
             {
                 connection.On<string>("secondPowerUp", (message) =>
                 {
-                    this.Controls.Find(powerUpName, true)[0].Visible = false;
+                    if (message != "")
+                    {
+                        this.Controls.Find(message, true)[0].Visible = false;
+                    }
                 });
                 await connection.SendAsync("GetFirstPowerUpStatus", powerUpName);
             }
@@ -397,7 +400,10 @@ namespace Client
             {
                 connection.On<string>("firstPowerUp", (message) =>
                 {
-                    this.Controls.Find(powerUpName, true)[0].Visible = false;
+                    if (message != "")
+                    {
+                        this.Controls.Find(message, true)[0].Visible = false;
+                    }
                 });
                 await connection.SendAsync("GetSecondPowerUpStatus", powerUpName);
             }
