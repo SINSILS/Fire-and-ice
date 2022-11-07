@@ -2,6 +2,7 @@
 using Client._Classes.AbstractFactories;
 using Client._Classes.AbstractProducts;
 using Client._Classes.Factories;
+using Client._Patterns_Designs._Adapter_Pattern;
 using Client._Patterns_Designs._Builder_Patern;
 using Client._Patterns_Designs._Decorator_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
@@ -189,6 +190,7 @@ namespace Client
                         {
                             coins[x.Name].setInvisible();
                             score.increaseScore(coins[x.Name].value);
+                            playerStats.IncreaseScore(coins[x.Name].value);
                             SendCoinsState_Async(x.Name);
                             txtScore.Refresh();
                         }
@@ -296,19 +298,19 @@ namespace Client
                 enemy.Speed = enemy.Speed * -1;
             }
 
-            if (player.Bounds.IntersectsWith(door.Bounds) && playerStats.score == 26)
+            if (player.Bounds.IntersectsWith(door.Bounds) && score.value == 36)
             {
                 gameTimer.Stop();
                 playerStats.isGameOver = true;
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
             }
 
-            if (playerStats.score > 5)
+            if (score.value == 36)
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
             }
 
-            if (playerStats.score < 5)
+            if (score.value == 0)
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Collect coins to complete the quest!";
             }
@@ -365,6 +367,7 @@ namespace Client
                     {
                         coins[splitedText[0]].setInvisible();
                         score.value = Convert.ToInt32(splitedText[1]);
+                        playerStats.IncreaseScore(Convert.ToInt32(splitedText[1]));
                         txtScore.Text = "Score: " + score.value;
                     }
                 });
@@ -379,6 +382,7 @@ namespace Client
                     {
                         coins[splitedText[0]].setInvisible();
                         score.value = Convert.ToInt32(splitedText[1]);
+                        playerStats.IncreaseScore(Convert.ToInt32(splitedText[1]));
                         txtScore.Text = "Score: " + score.value;
                     }
                 });
@@ -514,7 +518,7 @@ namespace Client
         public void buildCoins()
         {
             Director director = new Director();
-            int i = 1;
+            int i = 0;
             foreach (Control x in this.Controls)
             {
                 if (x is PictureBox && (string)x.Tag == "coin" && i == 1)
@@ -544,6 +548,17 @@ namespace Client
                     var coin = redCoinBuilder.GetCoin();
                     coin.picBox = (PictureBox)x;
                     coin.setValueAndColor();
+                    coins.Add(x.Name, coin);
+                    i = 1;
+                }
+                else if (x is PictureBox && (string)x.Tag == "coin" && i == 0)
+                {
+                    var redCoinBuilder = new RedCoinBuilder();
+                    director.Construct(redCoinBuilder);
+                    var coin = redCoinBuilder.GetCoin();
+                    coin.picBox = (PictureBox)x;
+                    FakeCoinAdapter fakeCoin = new FakeCoinAdapter(coin);
+                    fakeCoin.isFake();
                     coins.Add(x.Name, coin);
                     i = 1;
                 }

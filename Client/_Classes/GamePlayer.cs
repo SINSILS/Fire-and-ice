@@ -12,8 +12,8 @@ namespace Client._Classes
         public static int jumpSpeed { get; set; }
         public int force { get; set; }
         public static int playerSpeed { get; set; }
-        public  int horizontalSpeed { get; set; }
-        public  int verticalSpeed { get; set; }
+        public int horizontalSpeed { get; set; }
+        public int verticalSpeed { get; set; }
 
 
 
@@ -58,7 +58,12 @@ namespace Client._Classes
 
         public void LowerHealth(int value)
         {
-            health-=value;
+            health -= value;
+        }
+
+        public void IncreaseScore(int value)
+        {
+            score = score + value;
         }
 
     }
