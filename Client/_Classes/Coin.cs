@@ -3,19 +3,31 @@
     public class Coin
     {
         public string name { get; set; }
-        public PictureBox coin { get; set; }
-        //For future updates, when coins will have different values example: [yellow, 1]; [blue, 2]; [purple; 3]
-        public Dictionary<string, int> value = new Dictionary<string, int>();
+        public PictureBox picBox;
 
-        public Coin(PictureBox coin)
-        {
-            this.coin = coin;
-            name = coin.Name;
-        }
+        public List<Part> Parts { get; set; } = new List<Part>();
+        public int value;
 
+        public Coin() { }
         public void setInvisible()
         {
-            coin.Visible = false;
+            picBox.Visible = false;
+        }
+        public void setValueAndColor()
+        {
+            value = Parts.Sum(p => p.Value);
+            if (value == 1)
+            {
+                picBox.BackColor = Color.Yellow;
+            }
+            else if (value == 2)
+            {
+                picBox.BackColor = Color.Green;
+            }
+            else
+            {
+                picBox.BackColor = Color.Red;
+            }
         }
     }
 }

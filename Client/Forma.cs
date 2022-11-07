@@ -2,6 +2,7 @@
 using Client._Classes.AbstractFactories;
 using Client._Classes.AbstractProducts;
 using Client._Classes.Factories;
+using Client._Patterns_Designs._Builder_Patern;
 using Client._Patterns_Designs._Decorator_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
 using Client._Patterns_Designs.Observer;
@@ -38,7 +39,7 @@ namespace Client
             DoubleBuffered = true;
             player = player1;
             AsignPlayers();
-            getCoins();
+            buildCoins();
             lever = levelFactory.CreateInteractableLever();
 
             observer1.Subscribe(provider);
@@ -187,7 +188,7 @@ namespace Client
                         if (player.Bounds.IntersectsWith(x.Bounds) && x.Visible == true)
                         {
                             coins[x.Name].setInvisible();
-                            score.increaseScore(1);
+                            score.increaseScore(coins[x.Name].value);
                             SendCoinsState_Async(x.Name);
                             txtScore.Refresh();
                         }
@@ -509,17 +510,46 @@ namespace Client
             gameTimer.Start();
         }
 
-        //Gets all coins pictureBoxes to Dictionary for player
-        public void getCoins()
+        //Builds all coins parts and puts them into Dictionary for player
+        public void buildCoins()
         {
+            Director director = new Director();
+            int i = 1;
             foreach (Control x in this.Controls)
             {
-                if (x is PictureBox && (string)x.Tag == "coin")
+                if (x is PictureBox && (string)x.Tag == "coin" && i == 1)
                 {
-                    Coin coin = new Coin((PictureBox)x);
+                    var yellowCoinBuilder = new YellowCoinBuilder();
+                    director.Construct(yellowCoinBuilder);
+                    var coin = yellowCoinBuilder.GetCoin();
+                    coin.picBox = (PictureBox)x;
+                    coin.setValueAndColor();
                     coins.Add(x.Name, coin);
+                    i++;
                 }
+                else if (x is PictureBox && (string)x.Tag == "coin" && i == 2)
+                {
+                    var greenCoinBuilder = new GreenCoinBuilder();
+                    director.Construct(greenCoinBuilder);
+                    var coin = greenCoinBuilder.GetCoin();
+                    coin.picBox = (PictureBox)x;
+                    coin.setValueAndColor();
+                    coins.Add(x.Name, coin);
+                    i++;
+                }
+                else if (x is PictureBox && (string)x.Tag == "coin" && i == 3)
+                {
+                    var redCoinBuilder = new RedCoinBuilder();
+                    director.Construct(redCoinBuilder);
+                    var coin = redCoinBuilder.GetCoin();
+                    coin.picBox = (PictureBox)x;
+                    coin.setValueAndColor();
+                    coins.Add(x.Name, coin);
+                    i = 1;
+                }
+
             }
+
         }
 
         public PictureBox CreatePicBoxDyn(Color color, int xsize, int ysize, int locationx, int locationy, string tag)
