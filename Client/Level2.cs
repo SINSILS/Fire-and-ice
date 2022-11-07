@@ -2,6 +2,8 @@
 using Client._Classes.AbstractFactories;
 using Client._Classes.AbstractProducts;
 using Client._Classes.Factories;
+using Client._Patterns_Designs._Adapter_Pattern;
+using Client._Patterns_Designs._Builder_Patern;
 using Client._Patterns_Designs._Decorator_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
 using Client._Patterns_Designs.Observer;
@@ -15,8 +17,8 @@ namespace Client
         private HubConnection connection;
 
         GamePlayer playerStats = new(3, false, false, false, false, 0, 0, 5, 3);
-        //Enemy enemy = EnemyFactory.getEnemy("SpeedDemon");
-        //Dictionary<string, Coin> coins = new Dictionary<string, Coin>();
+        Enemy enemy = EnemyFactory.getEnemy("SpeedDemon");
+        Dictionary<string, Coin> coins = new Dictionary<string, Coin>();
         Score score = Score.getInstance();
         PictureBox player;
 
@@ -37,54 +39,53 @@ namespace Client
             DoubleBuffered = true;
             player = player1;
             AsignPlayers();
-            //getCoins();
+            buildCoins();
             lever = levelFactory.CreateInteractableLever();
             gameTimer2.Start();
 
-            //observer1.Subscribe(provider);
+            observer1.Subscribe(provider);
 
-            //provider.AddApplication(lever);
-            //observer1.List();
-            //SendLeverState_Async();
+            provider.AddApplication(lever);
+            observer1.List();
 
-            //PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300, "obstacle");
-            //PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350, "obstacle");
+            PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300, "obstacle");
+            PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350, "obstacle");
 
-            //PictureBox platform = CreatePicBoxDyn(Color.AliceBlue, 148, 35, 699, 500, "platform");
-            //obs = new(a, 5);
+            PictureBox platform = CreatePicBoxDyn(Color.AliceBlue, 148, 35, 699, 500, "platform");
+            obs = new(a, 5);
 
-            //GCHandle objHandle = GCHandle.Alloc(obs, GCHandleType.WeakTrackResurrection);
-            //long address = GCHandle.ToIntPtr(objHandle).ToInt64();
+            GCHandle objHandle = GCHandle.Alloc(obs, GCHandleType.WeakTrackResurrection);
+            long address = GCHandle.ToIntPtr(objHandle).ToInt64();
 
-            //Console.WriteLine("Adress of first obstacle: " + address.ToString());
+            Console.WriteLine("Adress of first obstacle: " + address.ToString());
 
-            //Console.WriteLine("Obstacle 1 damage: " + obs.Damage.ToString());
-            //clone = (Obstacle)obs.DeepCopy();
+            Console.WriteLine("Obstacle 1 damage: " + obs.Damage.ToString());
+            clone = (Obstacle)obs.DeepCopy();
 
-            //GCHandle objHandle1 = GCHandle.Alloc(clone, GCHandleType.WeakTrackResurrection);
-            //long address1 = GCHandle.ToIntPtr(objHandle1).ToInt64();
-            //Console.WriteLine("Adress of cloned:" + address1.ToString());
+            GCHandle objHandle1 = GCHandle.Alloc(clone, GCHandleType.WeakTrackResurrection);
+            long address1 = GCHandle.ToIntPtr(objHandle1).ToInt64();
+            Console.WriteLine("Adress of cloned:" + address1.ToString());
 
-            //clone.pic = b;
-
-
-            //b.Tag = "clone";
-            //clone.Damage = 0;
-            //Console.WriteLine("Cloned obstacle damage: " + clone.Damage.ToString());
+            clone.pic = b;
 
 
-
-            //IPlatform createdPlatform = new Platform(platform);
-            //createdPlatform.CreatePlatform();
-
-            //HorizontalPlatformDecorator horizontal = new HorizontalPlatformDecorator(createdPlatform);
-            //horizontal.CreatePlatform();
-            //speed = horizontal.Speed;
+            b.Tag = "clone";
+            clone.Damage = 0;
+            Console.WriteLine("Cloned obstacle damage: " + clone.Damage.ToString());
 
 
-            //IPlatform createdPlatform2 = new Platform();
-            //VerticalPlatformDecorator vertical = new VerticalPlatformDecorator(createdPlatform2);
-            //vertical.CreatePlatform();
+
+            IPlatform createdPlatform = new Platform(platform);
+            createdPlatform.CreatePlatform();
+
+            HorizontalPlatformDecorator horizontal = new HorizontalPlatformDecorator(createdPlatform);
+            horizontal.CreatePlatform();
+            speed = horizontal.Speed;
+
+
+            IPlatform createdPlatform2 = new Platform();
+            VerticalPlatformDecorator vertical = new VerticalPlatformDecorator(createdPlatform2);
+            vertical.CreatePlatform();
         }
         private async void AsignPlayers()
         {
@@ -185,8 +186,9 @@ namespace Client
                     {
                         if (player.Bounds.IntersectsWith(x.Bounds) && x.Visible == true)
                         {
-                            //coins[x.Name].setInvisible();
-                           // score.increaseScore(1);
+                            coins[x.Name].setInvisible();
+                            score.increaseScore(coins[x.Name].value);
+                            playerStats.IncreaseScore(coins[x.Name].value);
                             SendCoinsState_Async(x.Name);
                             txtScore.Refresh();
                         }
@@ -221,12 +223,12 @@ namespace Client
                     }
                 }
             }
-            //horizontalPlatform.Left -= playerStats.horizontalSpeed;
+            horizontalPlatform.Left -= playerStats.horizontalSpeed;
 
-            //if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
-            //{
-            //    playerStats.horizontalSpeed = playerStats.horizontalSpeed * -1;
-            //}
+            if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
+            {
+                playerStats.horizontalSpeed = playerStats.horizontalSpeed * -1;
+            }
 
             foreach (var pb in this.Controls
                                 .OfType<PictureBox>()
@@ -248,15 +250,16 @@ namespace Client
                 playerStats.verticalSpeed = playerStats.verticalSpeed * -1;
             }
 
-            if (playerStats.score > 5)
+            if (score.value == 67)
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
             }
 
-            if (playerStats.score < 5)
+            if (score.value == 36)
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Collect coins to complete the quest!";
             }
+
 
             if (player1.Bounds.IntersectsWith(door.Bounds))
             {
@@ -264,7 +267,7 @@ namespace Client
                 //playerStats.isGameOver = true;
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
                 Level3 newLevel = new Level3();
-                player1.Visible=false;
+                player1.Visible = false;
                 this.Hide();
                 gameTimer2.Stop();
                 newLevel.Show();
@@ -276,7 +279,7 @@ namespace Client
                 //playerStats.isGameOver = true;
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
                 Level3 newLevel = new Level3();
-                player2.Visible=false;
+                player2.Visible = false;
                 this.Hide();
                 gameTimer2.Stop();
                 newLevel.Show();
@@ -330,12 +333,13 @@ namespace Client
                 connection.On<string>("secondCoins", (message) =>
                 {
                     string[] splitedText = message.Split(',');
-                    //if (message != "" && coins.ContainsKey(splitedText[0]))
-                   // {
-                        //coins[splitedText[0]].setInvisible();
-                    //    score.value = Convert.ToInt32(splitedText[1]);
-                   //     txtScore.Text = "Score: " + score.value;
-                 //   }
+                    if (message != "" && coins.ContainsKey(splitedText[0]))
+                    {
+                        coins[splitedText[0]].setInvisible();
+                        score.value = Convert.ToInt32(splitedText[1]);
+                        playerStats.IncreaseScore(Convert.ToInt32(splitedText[1]));
+                        txtScore.Text = "Score: " + score.value;
+                    }
                 });
                 await connection.SendAsync("GetFirstCoinsStatus", coinName + "," + score.value);
             }
@@ -344,12 +348,13 @@ namespace Client
                 connection.On<string>("firstCoins", (message) =>
                 {
                     string[] splitedText = message.Split(',');
-                    //if (message != "" && coins.ContainsKey(splitedText[0]))
-                   // {
-                   //     coins[splitedText[0]].setInvisible();
-                    //    score.value = Convert.ToInt32(splitedText[1]);
-                    //    txtScore.Text = "Score: " + score.value;
-                 //   }
+                    if (message != "" && coins.ContainsKey(splitedText[0]))
+                    {
+                        coins[splitedText[0]].setInvisible();
+                        score.value = Convert.ToInt32(splitedText[1]);
+                        playerStats.IncreaseScore(Convert.ToInt32(splitedText[1]));
+                        txtScore.Text = "Score: " + score.value;
+                    }
                 });
                 await connection.SendAsync("GetSecondCoinsStatus", coinName + "," + score.value);
 
@@ -414,7 +419,7 @@ namespace Client
             playerStats.isGameOver = false;
 
 
-            //txtScore.Text = "Score: " + score;
+            txtScore.Text = "Score: " + score;
             txtScore.Refresh();
 
             foreach (Control x in this.Controls)
@@ -433,17 +438,57 @@ namespace Client
             score.value = 0;
         }
 
-        //Gets all coins pictureBoxes to Dictionary for player
-        public void getCoins()
+        //Builds all coins parts and puts them into Dictionary for player
+        public void buildCoins()
         {
+            Director director = new Director();
+            int i = 0;
             foreach (Control x in this.Controls)
             {
-                if (x is PictureBox && (string)x.Tag == "coin")
+                if (x is PictureBox && (string)x.Tag == "coin" && i == 1)
                 {
-                   // Coin coin = new Coin((PictureBox)x);
-                    //coins.Add(x.Name, coin);
+                    var yellowCoinBuilder = new YellowCoinBuilder();
+                    director.Construct(yellowCoinBuilder);
+                    var coin = yellowCoinBuilder.GetCoin();
+                    coin.picBox = (PictureBox)x;
+                    coin.setValueAndColor();
+                    coins.Add(x.Name, coin);
+                    i++;
                 }
+                else if (x is PictureBox && (string)x.Tag == "coin" && i == 2)
+                {
+                    var greenCoinBuilder = new GreenCoinBuilder();
+                    director.Construct(greenCoinBuilder);
+                    var coin = greenCoinBuilder.GetCoin();
+                    coin.picBox = (PictureBox)x;
+                    coin.setValueAndColor();
+                    coins.Add(x.Name, coin);
+                    i++;
+                }
+                else if (x is PictureBox && (string)x.Tag == "coin" && i == 3)
+                {
+                    var redCoinBuilder = new RedCoinBuilder();
+                    director.Construct(redCoinBuilder);
+                    var coin = redCoinBuilder.GetCoin();
+                    coin.picBox = (PictureBox)x;
+                    coin.setValueAndColor();
+                    coins.Add(x.Name, coin);
+                    i = 1;
+                }
+                else if (x is PictureBox && (string)x.Tag == "coin" && i == 0)
+                {
+                    var redCoinBuilder = new RedCoinBuilder();
+                    director.Construct(redCoinBuilder);
+                    var coin = redCoinBuilder.GetCoin();
+                    coin.picBox = (PictureBox)x;
+                    FakeCoinAdapter fakeCoin = new FakeCoinAdapter(coin);
+                    fakeCoin.isFake();
+                    coins.Add(x.Name, coin);
+                    i = 1;
+                }
+
             }
+
         }
 
         public PictureBox CreatePicBoxDyn(Color color, int xsize, int ysize, int locationx, int locationy, string tag)
