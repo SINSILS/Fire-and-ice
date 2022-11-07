@@ -298,11 +298,29 @@ namespace Client
                 enemy.Speed = enemy.Speed * -1;
             }
 
-            if (player.Bounds.IntersectsWith(door.Bounds) && score.value == 36)
+            if (player1.Bounds.IntersectsWith(door.Bounds))
             {
-                gameTimer.Stop();
-                playerStats.isGameOver = true;
+                // gameTimer.Stop();
+                //playerStats.isGameOver = true;
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
+                Level2 newLevel = new Level2();
+                this.Hide();
+                player1.Visible=false;
+
+                gameTimer.Stop();
+                newLevel.Show();
+            }
+            if (player2.Bounds.IntersectsWith(door.Bounds))
+            {
+                // gameTimer.Stop();
+                //playerStats.isGameOver = true;
+                txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
+                Level2 newLevel = new Level2();
+                this.Hide();
+                player2.Visible=false;
+
+                gameTimer.Stop();
+                newLevel.Show();
             }
 
             if (score.value == 36)
@@ -579,6 +597,10 @@ namespace Client
             Controls.Add(picture);
             picture.Show();
             return picture;
+        }
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

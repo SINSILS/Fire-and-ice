@@ -120,6 +120,7 @@ namespace Server.Hubs
             {
                 index = 2;
                 UserHandler.Players[1] = true;
+                UserHandler.Players[0] = false;
             }
             Console.WriteLine("Player index:" + index);
             await Clients.Caller.SendAsync("asigningPlayers", index.ToString());
