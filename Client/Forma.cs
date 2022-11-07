@@ -47,7 +47,6 @@ namespace Client
             observer1.List();
             SendLeverState_Async();
 
-
             PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300, "obstacle");
             PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350, "obstacle");
 
