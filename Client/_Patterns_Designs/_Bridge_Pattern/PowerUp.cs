@@ -10,7 +10,8 @@
     public abstract class PowerUp
     {
         protected int value;
+        public bool isCollected;
         public abstract PowerUpType GetPowerUpType();
-        public abstract int GetPowerUpValue();
+        public abstract int GetPowerUpValue(int startingValue);
     }
 }

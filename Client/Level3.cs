@@ -16,7 +16,7 @@ namespace Client
     {
         private HubConnection connection;
 
-        GamePlayer playerStats = new(3, false, false, false, false, 0, 0, 5, 3);
+        GamePlayer playerStats = new GamePlayer(3, 0, 5, 3, -8, 7);
         //Enemy enemy = EnemyFactory.getEnemy("SpeedDemon");
         Dictionary<string, Coin> coins = new Dictionary<string, Coin>();
         Score score = Score.getInstance();
@@ -102,7 +102,7 @@ namespace Client
                     player = player1;
                     ////cia galima pakeist: new NormalMovement() arba new SlowedMovement()
                     playerStats.SetMovement(new EnhancedMovement());
-                    playerStats.MovementAction();
+                    playerStats.MovementAction(playerStats);
 
                 }
                 else
@@ -113,7 +113,7 @@ namespace Client
                     player = player2;
                     ////cia pakeist: new EnhancedMovement() arba new SlowedMovement()
                     playerStats.SetMovement(new NormalMovement());
-                    playerStats.MovementAction();
+                    playerStats.MovementAction(playerStats);
                 }
             });
             await connection.SendAsync("AsignPlayer", "");
@@ -123,15 +123,15 @@ namespace Client
         {
             txtScore.Text = "Score: " + score.value;
 
-            player.Top += GamePlayer.jumpSpeed;
+            player.Top += playerStats.jumpSpeed;
 
             if (playerStats.goLeft == true)
             {
-                player.Left -= GamePlayer.playerSpeed;
+                player.Left -= playerStats.playerSpeed;
             }
             if (playerStats.goRight == true)
             {
-                player.Left += GamePlayer.playerSpeed;
+                player.Left += playerStats.playerSpeed;
             }
 
             if (playerStats.jumping == true && playerStats.force < 0)
@@ -141,12 +141,12 @@ namespace Client
 
             if (playerStats.jumping == true)
             {
-                playerStats.MovementAction();
+                playerStats.MovementAction(playerStats);
                 playerStats.force -= 1;
             }
             else
             {
-                GamePlayer.jumpSpeed = 10;
+                playerStats.jumpSpeed = 10;
             }
 
             foreach (Control x in this.Controls)
@@ -188,7 +188,6 @@ namespace Client
                         {
                             coins[x.Name].setInvisible();
                             score.increaseScore(coins[x.Name].value);
-                            playerStats.IncreaseScore(coins[x.Name].value);
                             SendCoinsState_Async(x.Name);
                             txtScore.Refresh();
                         }

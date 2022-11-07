@@ -3,6 +3,7 @@ using Client._Classes.AbstractFactories;
 using Client._Classes.AbstractProducts;
 using Client._Classes.Factories;
 using Client._Patterns_Designs._Adapter_Pattern;
+using Client._Patterns_Designs._Bridge_Pattern;
 using Client._Patterns_Designs._Builder_Patern;
 using Client._Patterns_Designs._Decorator_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
@@ -16,7 +17,7 @@ namespace Client
     {
         private HubConnection connection;
 
-        GamePlayer playerStats = new(3, false, false, false, false, 0, 0, 5, 3);
+        GamePlayer playerStats = new GamePlayer(3, 0, 5, 3, -8, 7);
         Enemy enemy = EnemyFactory.getEnemy("SpeedDemon");
         Dictionary<string, Coin> coins = new Dictionary<string, Coin>();
         Score score = Score.getInstance();
@@ -31,6 +32,8 @@ namespace Client
         ObserverHandler provider = new ObserverHandler();
 
         Obstacle obs, clone;
+
+        SpeedBoost speedPowerUp = new SpeedBoost(13);
 
         int speed;
 
@@ -103,8 +106,8 @@ namespace Client
                     label1.Text = "Ice Girl";
                     player = player1;
                     ////cia galima pakeist: new NormalMovement() arba new SlowedMovement()
-                    playerStats.SetMovement(new EnhancedMovement());
-                    playerStats.MovementAction();
+                    playerStats.SetMovement(new NormalMovement());
+                    playerStats.MovementAction(playerStats);
 
                 }
                 else
@@ -115,7 +118,7 @@ namespace Client
                     player = player2;
                     ////cia pakeist: new EnhancedMovement() arba new SlowedMovement()
                     playerStats.SetMovement(new NormalMovement());
-                    playerStats.MovementAction();
+                    playerStats.MovementAction(playerStats);
                 }
             });
             await connection.SendAsync("AsignPlayer", "");
@@ -125,15 +128,15 @@ namespace Client
         {
             txtScore.Text = "Score: " + score.value;
 
-            player.Top += GamePlayer.jumpSpeed;
+            player.Top += playerStats.jumpSpeed;
 
             if (playerStats.goLeft == true)
             {
-                player.Left -= GamePlayer.playerSpeed;
+                player.Left -= playerStats.playerSpeed;
             }
             if (playerStats.goRight == true)
             {
-                player.Left += GamePlayer.playerSpeed;
+                player.Left += playerStats.playerSpeed;
             }
 
             if (playerStats.jumping == true && playerStats.force < 0)
@@ -143,12 +146,12 @@ namespace Client
 
             if (playerStats.jumping == true)
             {
-                playerStats.MovementAction();
+                playerStats.MovementAction(playerStats);
                 playerStats.force -= 1;
             }
             else
             {
-                GamePlayer.jumpSpeed = 10;
+                playerStats.jumpSpeed = 10;
             }
 
             foreach (Control x in this.Controls)
@@ -190,7 +193,6 @@ namespace Client
                         {
                             coins[x.Name].setInvisible();
                             score.increaseScore(coins[x.Name].value);
-                            playerStats.IncreaseScore(coins[x.Name].value);
                             SendCoinsState_Async(x.Name);
                             txtScore.Refresh();
                         }
@@ -258,8 +260,17 @@ namespace Client
                             lever.SetActivated(false);
                             observer1.List();
                             SendLeverState_Async();
+                        }
+                    }
 
-
+                    if ((string)x.Tag == "speedPowerUp")
+                    {
+                        if (player.Bounds.IntersectsWith(x.Bounds) && speedPowerUp.isCollected == false)
+                        {
+                            x.Visible = false;
+                            speedPowerUp.isCollected = true;
+                            playerStats.ApplyPowerUp(speedPowerUp);
+                            SendPowerUpState_Async(x.Name + " " + speedPowerUp.isCollected);
                         }
                     }
                 }
@@ -305,7 +316,7 @@ namespace Client
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
                 Level2 newLevel = new Level2();
                 this.Hide();
-                player1.Visible=false;
+                player1.Visible = false;
 
                 gameTimer.Stop();
                 newLevel.Show();
@@ -317,7 +328,7 @@ namespace Client
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
                 Level2 newLevel = new Level2();
                 this.Hide();
-                player2.Visible=false;
+                player2.Visible = false;
 
                 gameTimer.Stop();
                 newLevel.Show();
@@ -372,6 +383,28 @@ namespace Client
             }
         }
 
+        public async Task SendPowerUpState_Async(string powerUpName)
+        {
+            if (int.Parse(playerLabel.Text) == 1)
+            {
+                connection.On<string>("secondPowerUp", (message) =>
+                {
+                    Console.WriteLine(message);
+                    Console.WriteLine(speedPowerUp.isCollected);
+                });
+                await connection.SendAsync("GetFirstPowerUpStatus", powerUpName);
+            }
+            else
+            {
+                connection.On<string>("firstPowerUp", (message) =>
+                {
+                    Console.WriteLine(message);
+                    Console.WriteLine(speedPowerUp.isCollected);
+                });
+                await connection.SendAsync("GetSecondPowerUpStatus", powerUpName);
+            }
+        }
+
         //Sets taken coins to invisible from another player and updates score
         public async Task SendCoinsState_Async(string coinName)
         {
@@ -385,7 +418,6 @@ namespace Client
                     {
                         coins[splitedText[0]].setInvisible();
                         score.value = Convert.ToInt32(splitedText[1]);
-                        playerStats.IncreaseScore(Convert.ToInt32(splitedText[1]));
                         txtScore.Text = "Score: " + score.value;
                     }
                 });
@@ -400,15 +432,12 @@ namespace Client
                     {
                         coins[splitedText[0]].setInvisible();
                         score.value = Convert.ToInt32(splitedText[1]);
-                        playerStats.IncreaseScore(Convert.ToInt32(splitedText[1]));
                         txtScore.Text = "Score: " + score.value;
                     }
                 });
                 await connection.SendAsync("GetSecondCoinsStatus", coinName + "," + score.value);
 
             }
-
-
         }
 
         public async Task SendLeverState_Async()

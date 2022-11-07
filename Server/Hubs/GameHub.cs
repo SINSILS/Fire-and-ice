@@ -156,6 +156,14 @@ namespace Server.Hubs
             await Clients.All.SendAsync("secondLever", message);
             Console.WriteLine($"2 Lever: {message}");
         }
+        public async Task GetFirstPowerUpStatus(string message)
+        {
+            await Clients.All.SendAsync("firstPowerUp", message);
+        }
+        public async Task GetSecondPowerUpStatus(string message)
+        {
+            await Clients.All.SendAsync("secondPowerUp", message);
+        }
     }
 }
 

@@ -5,6 +5,7 @@
         public SpeedBoost(int value)
         {
             this.value = value;
+            this.isCollected = false;
         }
 
         public override PowerUpType GetPowerUpType()
@@ -12,9 +13,20 @@
             return PowerUpType.SpeedBoost;
         }
 
-        public override int GetPowerUpValue()
+        public override int GetPowerUpValue(int speed)
         {
-            return value;
+            int newValue;
+            if (speed >= 30)
+            {
+                newValue = 30;
+            }
+            else
+            {
+                newValue = value + speed;
+
+                if (newValue >= 30) newValue = 30;
+            }
+            return newValue;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Client._Patterns_Designs._Strategy_Patern;
+﻿using Client._Patterns_Designs._Bridge_Pattern;
+using Client._Patterns_Designs._Strategy_Patern;
 
 namespace Client._Classes
 {
@@ -6,54 +7,43 @@ namespace Client._Classes
     {
         public bool goLeft, goRight, jumping, isGameOver, canPress;
         public int health { get; set; }
-        public int score { get; set; }
-
-
-        public static int jumpSpeed { get; set; }
+        public int jumpSpeed { get; set; }
         public int force { get; set; }
-        public static int playerSpeed { get; set; }
+        public int playerSpeed { get; set; }
         public int horizontalSpeed { get; set; }
         public int verticalSpeed { get; set; }
 
 
 
-        private MoveAlgorithm moveventType;
+        private MoveAlgorithm movementType;
 
-        //public GamePlayer(int health, bool goLeft, bool goRight, bool jumping, bool isGameOver, int jumpSpeed, int force, int score, int playerSpeed, int horizontalSpeed, int verticalSpeed)
-
-
-        public GamePlayer(int health, bool goLeft, bool goRight, bool jumping, bool isGameOver, int score, int force, int horizontalSpeed, int verticalSpeed)
+        public GamePlayer(int health, int force, int horizontalSpeed, int verticalSpeed, int jumpSpeed, int playerSpeed)
         {
             this.health = health;
-            this.goLeft = goLeft;
-            this.goRight = goRight;
-            this.jumping = jumping;
-            this.isGameOver = isGameOver;
-            this.score = score;
+            goLeft = false;
+            goRight = false;
+            jumping = false;
+            isGameOver = false;
             this.force = force;
             this.horizontalSpeed = horizontalSpeed;
             this.verticalSpeed = verticalSpeed;
-            //this.jumpSpeed = jumpSpeed;
-            //this.force = force;
-            //this.playerSpeed = playerSpeed;
-            //this.horizontalSpeed = horizontalSpeed;
-            //this.verticalSpeed = verticalSpeed;
+            this.jumpSpeed = jumpSpeed;
+            this.playerSpeed = playerSpeed;
         }
-
 
         public MoveAlgorithm GetMovement()
         {
-            return moveventType;
+            return movementType;
         }
 
         public void SetMovement(MoveAlgorithm moveType)
         {
-            this.moveventType = moveType;
+            movementType = moveType;
         }
 
-        public void MovementAction()
+        public void MovementAction(GamePlayer player)
         {
-            this.moveventType.DoMovement();
+            movementType.DoMovement(player);
         }
 
         public void LowerHealth(int value)
@@ -61,10 +51,29 @@ namespace Client._Classes
             health -= value;
         }
 
-        public void IncreaseScore(int value)
+        public void ApplyPowerUp(PowerUp powerUp)
         {
-            score = score + value;
-        }
+            PowerUpType type = powerUp.GetPowerUpType();
 
+            switch (type)
+            {
+                case PowerUpType.SpeedBoost:
+                    int newSpeed = powerUp.GetPowerUpValue(playerSpeed);
+                    playerSpeed = newSpeed;
+                    SetMovement(new EnhancedMovement());
+                    MovementAction(this);
+                    break;
+                case PowerUpType.Healing:
+                    int newHealth = powerUp.GetPowerUpValue(health);
+                    health = newHealth;
+                    break;
+                case PowerUpType.JumpBoost:
+                    int newJumpheight = powerUp.GetPowerUpValue(jumpSpeed);
+                    jumpSpeed = newJumpheight;
+                    SetMovement(new EnhancedMovement());
+                    MovementAction(this);
+                    break;
+            }
+        }
     }
 }
