@@ -270,7 +270,7 @@ namespace Client
                             x.Visible = false;
                             speedPowerUp.isCollected = true;
                             playerStats.ApplyPowerUp(speedPowerUp);
-                            SendPowerUpState_Async(x.Name + " " + speedPowerUp.isCollected);
+                            SendPowerUpState_Async(x.Name);
                         }
                     }
                 }
@@ -389,8 +389,7 @@ namespace Client
             {
                 connection.On<string>("secondPowerUp", (message) =>
                 {
-                    Console.WriteLine(message);
-                    Console.WriteLine(speedPowerUp.isCollected);
+                    this.Controls.Find(powerUpName, true)[0].Visible = false;
                 });
                 await connection.SendAsync("GetFirstPowerUpStatus", powerUpName);
             }
@@ -398,8 +397,7 @@ namespace Client
             {
                 connection.On<string>("firstPowerUp", (message) =>
                 {
-                    Console.WriteLine(message);
-                    Console.WriteLine(speedPowerUp.isCollected);
+                    this.Controls.Find(powerUpName, true)[0].Visible = false;
                 });
                 await connection.SendAsync("GetSecondPowerUpStatus", powerUpName);
             }
