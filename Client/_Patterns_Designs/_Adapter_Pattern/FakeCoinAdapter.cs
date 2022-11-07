@@ -2,7 +2,7 @@
 
 namespace Client._Patterns_Designs._Adapter_Pattern
 {
-    internal class FakeCoinAdapter : IFake
+    public class FakeCoinAdapter : IFake
     {
         private Coin coin;
         public FakeCoinAdapter(Coin coin)
