@@ -27,7 +27,7 @@ namespace Client._Patterns_Designs._Decorator_Pattern
                 Platform HorizontalPlatform = (Platform)platform;
                 HorizontalPlatform.Picture.BackColor = Color.ForestGreen;
                 HorizontalPlatform.Picture.Tag="Horizontal";
-                HorizontalPlatform.Speed=2;
+                HorizontalPlatform.Speed=1;
             }
         }
     }

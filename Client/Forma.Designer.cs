@@ -182,14 +182,14 @@
             // 
             // horizontalPlatform
             // 
-            this.horizontalPlatform.BackColor = System.Drawing.Color.Maroon;
+            this.horizontalPlatform.BackColor = System.Drawing.Color.ForestGreen;
             this.horizontalPlatform.Location = new System.Drawing.Point(321, 164);
             this.horizontalPlatform.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.horizontalPlatform.Name = "horizontalPlatform";
             this.horizontalPlatform.Size = new System.Drawing.Size(232, 35);
             this.horizontalPlatform.TabIndex = 1;
             this.horizontalPlatform.TabStop = false;
-            this.horizontalPlatform.Tag = "Horizontal";
+            this.horizontalPlatform.Tag = "platform";
             // 
             // pictureBox8
             // 
@@ -212,6 +212,7 @@
             this.verticalPlatform.TabIndex = 1;
             this.verticalPlatform.TabStop = false;
             this.verticalPlatform.Tag = "platform";
+            this.verticalPlatform.Visible = false;
             // 
             // player1
             // 
@@ -565,7 +566,7 @@
             // obstacle
             // 
             this.obstacle.BackColor = System.Drawing.Color.Peru;
-            this.obstacle.Location = new System.Drawing.Point(675, 302);
+            this.obstacle.Location = new System.Drawing.Point(670, 302);
             this.obstacle.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.obstacle.Name = "obstacle";
             this.obstacle.Size = new System.Drawing.Size(35, 46);

@@ -27,6 +27,8 @@ namespace Client._Patterns_Designs._Decorator_Pattern
                 Platform VerticalPlatformDecorator = (Platform)platform;
                 VerticalPlatformDecorator.Picture.BackColor = Color.BlanchedAlmond;
                 VerticalPlatformDecorator.Picture.Tag="Vertical";
+                VerticalPlatformDecorator.Speed=3;
+
             }
         }
     }

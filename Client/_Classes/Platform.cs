@@ -36,8 +36,7 @@ namespace Client._Classes
 
         public IPlatform CreatePlatform()
         {
-            Picture.Location = new Point(400, 400);
-            Picture.BackColor=Color.Coral;
+            Picture.BackColor=Color.Red;
             return this;
         }
     }

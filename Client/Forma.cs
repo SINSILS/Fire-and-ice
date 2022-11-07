@@ -35,7 +35,7 @@ namespace Client
 
         SpeedBoost speedPowerUp = new SpeedBoost(13);
 
-        int speed;
+        int speed, speedVertical;
 
         public Forma()
         {
@@ -53,9 +53,11 @@ namespace Client
             SendLeverState_Async();
 
             PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300, "obstacle");
-            PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350, "obstacle");
+            PictureBox b = CreatePicBoxDyn(Color.DeepPink, 75, 75, 738, 387, "obstacle");
 
             PictureBox platform = CreatePicBoxDyn(Color.AliceBlue, 148, 35, 699, 500, "platform");
+            PictureBox platformVertical = CreatePicBoxDyn(Color.AliceBlue, 148, 35, 400, 400, "platform");
+            PictureBox regPlatform = CreatePicBoxDyn(Color.AliceBlue, 148, 35, 706, 204, "platform");
             obs = new(a, 5);
 
             GCHandle objHandle = GCHandle.Alloc(obs, GCHandleType.WeakTrackResurrection);
@@ -82,14 +84,18 @@ namespace Client
             IPlatform createdPlatform = new Platform(platform);
             createdPlatform.CreatePlatform();
 
+            IPlatform createdPlatformReg = new Platform(regPlatform);
+            createdPlatformReg.CreatePlatform();
+
             HorizontalPlatformDecorator horizontal = new HorizontalPlatformDecorator(createdPlatform);
             horizontal.CreatePlatform();
             speed = horizontal.Speed;
 
 
-            IPlatform createdPlatform2 = new Platform();
+            IPlatform createdPlatform2 = new Platform(platformVertical);
             VerticalPlatformDecorator vertical = new VerticalPlatformDecorator(createdPlatform2);
             vertical.CreatePlatform();
+            speedVertical=vertical.Speed;
         }
 
         private async void AsignPlayers()
@@ -176,6 +182,18 @@ namespace Client
                     }
 
                     if ((string)x.Tag == "Horizontal")
+                    {
+                        if (player.Bounds.IntersectsWith(x.Bounds))
+                        {
+                            playerStats.force = 8;
+                            player.Top = x.Top - player.Height;
+                            player.Left -= playerStats.horizontalSpeed;
+                        }
+
+                        x.BringToFront();
+                    }
+
+                    if ((string)x.Tag == "Vertical")
                     {
                         if (player.Bounds.IntersectsWith(x.Bounds))
                         {
@@ -275,23 +293,36 @@ namespace Client
                     }
                 }
             }
-            //horizontalPlatform.Left -= playerStats.horizontalSpeed;
+            horizontalPlatform.Left -= playerStats.horizontalSpeed/3;
 
-            //if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
-            //{
-            //    playerStats.horizontalSpeed = playerStats.horizontalSpeed * -1;
-            //}
+            if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
+            {
+                playerStats.horizontalSpeed = playerStats.horizontalSpeed * -1;
+            }
 
             foreach (var pb in this.Controls
                                 .OfType<PictureBox>()
                                 .Where(x => (string)x.Tag == "Horizontal")
                                 .ToList())
             {
-                pb.Left -= speed;
+                pb.Left -= playerStats.horizontalSpeed/3;
 
                 if (pb.Left < 0 || pb.Left + pb.Width > this.ClientSize.Width)
                 {
                     playerStats.horizontalSpeed = playerStats.horizontalSpeed * -1;
+                }
+            }
+
+            foreach (var pb in this.Controls
+                    .OfType<PictureBox>()
+                    .Where(x => (string)x.Tag == "Vertical")
+                    .ToList())
+            {
+                pb.Top += playerStats.verticalSpeed * -speedVertical;
+
+                if (pb.Top < 600)
+                {
+                    playerStats.verticalSpeed = playerStats.verticalSpeed * -1;
                 }
             }
 

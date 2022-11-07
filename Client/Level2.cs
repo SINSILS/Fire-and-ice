@@ -48,30 +48,30 @@ namespace Client
             provider.AddApplication(lever);
             observer1.List();
 
-            PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300, "obstacle");
-            PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350, "obstacle");
+            // PictureBox a = CreatePicBoxDyn(Color.Black, 50, 50, 300, 300, "obstacle");
+            // PictureBox b = CreatePicBoxDyn(Color.DeepPink, 50, 50, 350, 350, "obstacle");
 
             PictureBox platform = CreatePicBoxDyn(Color.AliceBlue, 148, 35, 699, 500, "platform");
-            obs = new(a, 5);
+            //obs = new(a, 5);
 
-            GCHandle objHandle = GCHandle.Alloc(obs, GCHandleType.WeakTrackResurrection);
-            long address = GCHandle.ToIntPtr(objHandle).ToInt64();
+            //GCHandle objHandle = GCHandle.Alloc(obs, GCHandleType.WeakTrackResurrection);
+            //long address = GCHandle.ToIntPtr(objHandle).ToInt64();
 
-            Console.WriteLine("Adress of first obstacle: " + address.ToString());
+            //Console.WriteLine("Adress of first obstacle: " + address.ToString());
 
-            Console.WriteLine("Obstacle 1 damage: " + obs.Damage.ToString());
-            clone = (Obstacle)obs.DeepCopy();
+            //Console.WriteLine("Obstacle 1 damage: " + obs.Damage.ToString());
+            ////clone = (Obstacle)obs.DeepCopy();
 
-            GCHandle objHandle1 = GCHandle.Alloc(clone, GCHandleType.WeakTrackResurrection);
-            long address1 = GCHandle.ToIntPtr(objHandle1).ToInt64();
-            Console.WriteLine("Adress of cloned:" + address1.ToString());
+            //GCHandle objHandle1 = GCHandle.Alloc(clone, GCHandleType.WeakTrackResurrection);
+            //long address1 = GCHandle.ToIntPtr(objHandle1).ToInt64();
+            //Console.WriteLine("Adress of cloned:" + address1.ToString());
 
-            clone.pic = b;
+            //clone.pic = b;
 
 
-            b.Tag = "clone";
-            clone.Damage = 0;
-            Console.WriteLine("Cloned obstacle damage: " + clone.Damage.ToString());
+            // b.Tag = "clone";
+            //clone.Damage = 0;
+            //Console.WriteLine("Cloned obstacle damage: " + clone.Damage.ToString());
 
 
 

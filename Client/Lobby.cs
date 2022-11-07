@@ -91,10 +91,15 @@ namespace Client
                     }
 
                 }
-                
             });
 
             await connection.SendAsync("StartCounting", "Counting started");
+            this.Hide();
+        }
+
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
