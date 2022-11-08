@@ -5,6 +5,7 @@ using Client._Classes.Factories;
 using Client._Patterns_Designs._Adapter_Pattern;
 using Client._Patterns_Designs._Bridge_Pattern;
 using Client._Patterns_Designs._Builder_Patern;
+using Client._Patterns_Designs._Command_Pattern;
 using Client._Patterns_Designs._Decorator_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
 using Client._Patterns_Designs.Observer;
@@ -36,6 +37,10 @@ namespace Client
         SpeedBoost speedPowerUp = new SpeedBoost(13);
 
         int speed, speedVertical;
+
+
+        private CharacterMoveClean enemyMovement = new CharacterMoveClean();
+        private bool moveEnemyOneRight = true;
 
         public Forma()
         {
@@ -333,11 +338,22 @@ namespace Client
                 playerStats.verticalSpeed = playerStats.verticalSpeed * -1;
             }
 
-            enemyOne.Left -= enemy.Speed;
+
+            if (moveEnemyOneRight)
+            {
+                ICommand moveEnemyRightCommand = new MoveEnemyRight(enemy.Speed, enemyOne);
+                enemyMovement.commandHandler.AddCommand(moveEnemyRightCommand);
+            }
+            else
+            {
+                ICommand moveEnemyLeftCommand = new MoveEnemyLeft(enemy.Speed, enemyOne);
+                enemyMovement.commandHandler.AddCommand(moveEnemyLeftCommand);
+            }
+
 
             if (enemyOne.Left < pictureBox5.Left || enemyOne.Left + enemyOne.Width > pictureBox5.Left + pictureBox5.Width)
             {
-                enemy.Speed = enemy.Speed * -1;
+                moveEnemyOneRight = !moveEnemyOneRight;
             }
 
             if (player1.Bounds.IntersectsWith(door.Bounds))
@@ -646,6 +662,11 @@ namespace Client
                 }
 
             }
+
+        }
+
+        private void Forma_Load(object sender, EventArgs e)
+        {
 
         }
 
