@@ -1,6 +1,6 @@
 ﻿namespace Client._Patterns_Designs._Bridge_Pattern
 {
-    internal class Healing : PowerUp
+    public class Healing : PowerUp
     {
         public Healing(int value)
         {

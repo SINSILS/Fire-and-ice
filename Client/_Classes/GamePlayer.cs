@@ -16,7 +16,6 @@ namespace Client._Classes
 
 
         private MoveAlgorithm movementType;
-
         public GamePlayer(int health, int force, int horizontalSpeed, int verticalSpeed, int jumpSpeed, int playerSpeed)
         {
             this.health = health;

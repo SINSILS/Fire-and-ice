@@ -1,6 +1,6 @@
 ﻿namespace Client._Patterns_Designs._Bridge_Pattern
 {
-    internal class SpeedBoost : PowerUp
+    public class SpeedBoost : PowerUp
     {
         public SpeedBoost(int value)
         {
