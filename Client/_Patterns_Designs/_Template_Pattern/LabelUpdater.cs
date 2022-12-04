@@ -14,21 +14,35 @@
         private void ShowLabel()
         {
             Form currentForm = Form.ActiveForm;
-            Label? t = currentForm.Controls["updateLabel"] as Label;
-            if (t != null)
+            try
             {
-                t.Visible = true;
+                Label? t = currentForm.Controls["updateLabel"] as Label;
+                if (t != null)
+                {
+                    t.Visible = true;
+                }
+            }
+            catch (NullReferenceException)
+            {
+                //?
             }
         }
 
         private async void HideLabel()
         {
             Form currentForm = Form.ActiveForm;
-            Label? t = currentForm.Controls["updateLabel"] as Label;
-            if (t != null)
+            try
             {
-                await Task.Delay(3000);
-                t.Visible = false;
+                Label? t = currentForm.Controls["updateLabel"] as Label;
+                if (t != null)
+                {
+                    await Task.Delay(3000);
+                    t.Visible = false;
+                }
+            }
+            catch  (NullReferenceException)
+            {
+                //?
             }
         }
     }

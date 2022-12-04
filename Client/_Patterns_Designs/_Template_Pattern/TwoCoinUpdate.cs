@@ -11,14 +11,11 @@ namespace Client._Patterns_Designs._Template_Pattern
         public override void LabelText()
         {
             Form currentForm = Form.ActiveForm;
-            for (int i = 0; i < currentForm.Controls.Count; i++)
-            {
                 Label? t = currentForm.Controls["updateLabel"] as Label;
                 if (t != null)
                 {
                     t.Text = "You got two coins!";
                 }
-            }
         }
     }
 }

@@ -408,7 +408,13 @@ namespace Client
                 newLevel.Show();
             }
 
-            if (score.value == 36 && doors.State.GetType().Name == "ClosedDoorState")
+            //if (score.value == 36 && doors.State.GetType().Name == "ClosedDoorState")
+            //{
+            //    txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
+            //    doors.Request();
+            //}
+
+            if (score.value >0)
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
                 doors.Request();

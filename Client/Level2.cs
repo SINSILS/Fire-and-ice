@@ -270,7 +270,13 @@ namespace Client
                 playerStats.verticalSpeed = playerStats.verticalSpeed * -1;
             }
 
-            if ((score.value == 67 || score.value == 31) && doors.State.GetType().Name == "ClosedDoorState")
+            //if ((score.value == 67 || score.value == 31) && doors.State.GetType().Name == "ClosedDoorState")
+            //{
+            //    txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
+            //    doors.Request();
+            //}
+
+            if (score.value > 0)
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
                 doors.Request();
