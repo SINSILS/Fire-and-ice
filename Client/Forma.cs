@@ -7,6 +7,7 @@ using Client._Patterns_Designs._Bridge_Pattern;
 using Client._Patterns_Designs._Builder_Patern;
 using Client._Patterns_Designs._Command_Pattern;
 using Client._Patterns_Designs._Decorator_Pattern;
+using Client._Patterns_Designs._State_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
 using Client._Patterns_Designs._Template_Pattern;
 using Client._Patterns_Designs.Observer;
@@ -47,6 +48,8 @@ namespace Client
         LabelUpdater twocoiner = new TwoCoinUpdate();
         LabelUpdater threecoiner = new ThreeCoinUpdate();
         LabelUpdater powerup = new PowerupUpdate();
+
+        Door doors = new Door(new ClosedDoorState());
 
         public Forma()
         {
@@ -106,7 +109,9 @@ namespace Client
             IPlatform createdPlatform2 = new Platform(platformVertical);
             VerticalPlatformDecorator vertical = new VerticalPlatformDecorator(createdPlatform2);
             vertical.CreatePlatform();
-            speedVertical=vertical.Speed;
+            speedVertical = vertical.Speed;
+
+            doors.picBox = door;
         }
 
         private async void AsignPlayers()
@@ -320,7 +325,7 @@ namespace Client
                     }
                 }
             }
-            horizontalPlatform.Left -= playerStats.horizontalSpeed/3;
+            horizontalPlatform.Left -= playerStats.horizontalSpeed / 3;
 
             if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
             {
@@ -332,7 +337,7 @@ namespace Client
                                 .Where(x => (string)x.Tag == "Horizontal")
                                 .ToList())
             {
-                pb.Left -= playerStats.horizontalSpeed/3;
+                pb.Left -= playerStats.horizontalSpeed / 3;
 
                 if (pb.Left < 0 || pb.Left + pb.Width > this.ClientSize.Width)
                 {
@@ -378,7 +383,7 @@ namespace Client
                 moveEnemyOneRight = !moveEnemyOneRight;
             }
 
-            if (player1.Bounds.IntersectsWith(door.Bounds))
+            if (player1.Bounds.IntersectsWith(doors.picBox.Bounds) && doors.State.GetType().Name == "OpenDoorState")
             {
                 // gameTimer.Stop();
                 //playerStats.isGameOver = true;
@@ -390,7 +395,7 @@ namespace Client
                 gameTimer.Stop();
                 newLevel.Show();
             }
-            if (player2.Bounds.IntersectsWith(door.Bounds))
+            if (player2.Bounds.IntersectsWith(doors.picBox.Bounds) && doors.State.GetType().Name == "OpenDoorState")
             {
                 // gameTimer.Stop();
                 //playerStats.isGameOver = true;
@@ -403,9 +408,10 @@ namespace Client
                 newLevel.Show();
             }
 
-            if (score.value == 36)
+            if (score.value == 36 && doors.State.GetType().Name == "ClosedDoorState")
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
+                doors.Request();
             }
 
             if (score.value == 0)
@@ -632,6 +638,11 @@ namespace Client
             verticalPlatform.Top = 581;
             score.value = 0;
             gameTimer.Start();
+
+            if (doors.State.GetType().Name == "OpenDoorState")
+            {
+                doors.Request();
+            }
         }
 
         //Builds all coins parts and puts them into Dictionary for player

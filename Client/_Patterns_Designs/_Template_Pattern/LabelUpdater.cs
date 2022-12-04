@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Client._Patterns_Designs._Template_Pattern
+﻿namespace Client._Patterns_Designs._Template_Pattern
 {
     public abstract class LabelUpdater
     {
@@ -40,4 +34,4 @@ namespace Client._Patterns_Designs._Template_Pattern
     }
 }
 
-   
+
