@@ -68,6 +68,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.Leveer = new System.Windows.Forms.PictureBox();
             this.pictureBox37 = new System.Windows.Forms.PictureBox();
+            this.updateLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -519,12 +520,23 @@
             this.pictureBox37.TabStop = false;
             this.pictureBox37.Tag = "platform";
             // 
+            // updateLabel
+            // 
+            this.updateLabel.AutoSize = true;
+            this.updateLabel.Font = new System.Drawing.Font("Segoe UI", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.updateLabel.Location = new System.Drawing.Point(306, 59);
+            this.updateLabel.Name = "updateLabel";
+            this.updateLabel.Size = new System.Drawing.Size(86, 46);
+            this.updateLabel.TabIndex = 17;
+            this.updateLabel.Visible = false;
+            // 
             // Level2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightBlue;
             this.ClientSize = new System.Drawing.Size(922, 562);
+            this.Controls.Add(this.updateLabel);
             this.Controls.Add(this.pictureBox37);
             this.Controls.Add(this.Leveer);
             this.Controls.Add(this.label1);
@@ -645,5 +657,6 @@
         private Label label1;
         private PictureBox Leveer;
         private PictureBox pictureBox37;
+        private Label updateLabel;
     }
 }

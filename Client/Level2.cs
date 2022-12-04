@@ -6,6 +6,7 @@ using Client._Patterns_Designs._Adapter_Pattern;
 using Client._Patterns_Designs._Builder_Patern;
 using Client._Patterns_Designs._Decorator_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
+using Client._Patterns_Designs._Template_Pattern;
 using Client._Patterns_Designs.Observer;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Runtime.InteropServices;
@@ -33,6 +34,11 @@ namespace Client
         Obstacle obs, clone;
 
         int speed;
+        LabelUpdater onecoiner = new OneCoinUpdate();
+        LabelUpdater twocoiner = new TwoCoinUpdate();
+        LabelUpdater threecoiner = new ThreeCoinUpdate();
+
+
         public Level2()
         {
             InitializeComponent();
@@ -86,6 +92,7 @@ namespace Client
             IPlatform createdPlatform2 = new Platform();
             VerticalPlatformDecorator vertical = new VerticalPlatformDecorator(createdPlatform2);
             vertical.CreatePlatform();
+
         }
         private async void AsignPlayers()
         {
@@ -188,6 +195,19 @@ namespace Client
                         {
                             coins[x.Name].setInvisible();
                             score.increaseScore(coins[x.Name].value);
+                            if (coins[x.Name].value == 1)
+                            {
+                                onecoiner.Update();
+                            }
+                            if (coins[x.Name].value == 2)
+                            {
+                                twocoiner.Update();
+                            }
+
+                            if (coins[x.Name].value == 3)
+                            {
+                                threecoiner.Update();
+                            }
                             SendCoinsState_Async(x.Name);
                             txtScore.Refresh();
                         }

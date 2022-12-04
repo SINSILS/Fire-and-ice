@@ -73,6 +73,7 @@
             this.pictureBox37 = new System.Windows.Forms.PictureBox();
             this.obstacle = new System.Windows.Forms.PictureBox();
             this.pictureBox14 = new System.Windows.Forms.PictureBox();
+            this.updateLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -584,12 +585,23 @@
             this.pictureBox14.TabStop = false;
             this.pictureBox14.Tag = "speedPowerUp";
             // 
+            // updateLabel
+            // 
+            this.updateLabel.AutoSize = true;
+            this.updateLabel.Font = new System.Drawing.Font("Segoe UI", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.updateLabel.Location = new System.Drawing.Point(306, 59);
+            this.updateLabel.Name = "updateLabel";
+            this.updateLabel.Size = new System.Drawing.Size(86, 46);
+            this.updateLabel.TabIndex = 17;
+            this.updateLabel.Visible = false;
+            // 
             // Forma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightBlue;
             this.ClientSize = new System.Drawing.Size(936, 734);
+            this.Controls.Add(this.updateLabel);
             this.Controls.Add(this.pictureBox14);
             this.Controls.Add(this.obstacle);
             this.Controls.Add(this.pictureBox37);
@@ -635,7 +647,6 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "Forma";
             this.Text = "Fire And Ice";
-            this.Load += new System.EventHandler(this.Forma_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyIsDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeyIsUp);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -726,5 +737,6 @@
         private PictureBox pictureBox37;
         private PictureBox obstacle;
         private PictureBox pictureBox14;
+        private Label updateLabel;
     }
 }

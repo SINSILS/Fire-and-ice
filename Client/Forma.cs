@@ -8,6 +8,7 @@ using Client._Patterns_Designs._Builder_Patern;
 using Client._Patterns_Designs._Command_Pattern;
 using Client._Patterns_Designs._Decorator_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
+using Client._Patterns_Designs._Template_Pattern;
 using Client._Patterns_Designs.Observer;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Runtime.InteropServices;
@@ -41,6 +42,11 @@ namespace Client
 
         private CharacterMoveClean enemyMovement = new CharacterMoveClean();
         private bool moveEnemyOneRight = true;
+
+        LabelUpdater onecoiner = new OneCoinUpdate();
+        LabelUpdater twocoiner = new TwoCoinUpdate();
+        LabelUpdater threecoiner = new ThreeCoinUpdate();
+        LabelUpdater powerup = new PowerupUpdate();
 
         public Forma()
         {
@@ -216,6 +222,19 @@ namespace Client
                         {
                             coins[x.Name].setInvisible();
                             score.increaseScore(coins[x.Name].value);
+                            if (coins[x.Name].value == 1)
+                            {
+                                onecoiner.Update();
+                            }
+                            if (coins[x.Name].value == 2)
+                            {
+                                twocoiner.Update();
+                            }
+
+                            if (coins[x.Name].value == 3)
+                            {
+                                threecoiner.Update();
+                            }
                             SendCoinsState_Async(x.Name);
                             txtScore.Refresh();
                         }
@@ -294,6 +313,9 @@ namespace Client
                             speedPowerUp.isCollected = true;
                             playerStats.ApplyPowerUp(speedPowerUp);
                             SendPowerUpState_Async(x.Name);
+                            powerup.Update();
+                            //SelectedGun selectedGun = new PistolWeapon();
+                            //selectedGun.SelectNewGun();
                         }
                     }
                 }
@@ -665,11 +687,6 @@ namespace Client
 
         }
 
-        private void Forma_Load(object sender, EventArgs e)
-        {
-
-        }
-
         public PictureBox CreatePicBoxDyn(Color color, int xsize, int ysize, int locationx, int locationy, string tag)
         {
             var picture = new PictureBox
@@ -687,5 +704,6 @@ namespace Client
         {
             Application.Exit();
         }
+
     }
 }
