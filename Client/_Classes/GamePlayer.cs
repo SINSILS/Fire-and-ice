@@ -8,11 +8,13 @@ namespace Client._Classes
         public bool goLeft, goRight, jumping, isGameOver, canPress;
         public int health { get; set; }
         public int jumpSpeed { get; set; }
+        public int boostedJumpSpeed;
         public int force { get; set; }
         public int playerSpeed { get; set; }
         public int horizontalSpeed { get; set; }
         public int verticalSpeed { get; set; }
 
+        public bool activePowerUp = false;
 
 
         private MoveAlgorithm movementType;
@@ -27,6 +29,7 @@ namespace Client._Classes
             this.horizontalSpeed = horizontalSpeed;
             this.verticalSpeed = verticalSpeed;
             this.jumpSpeed = jumpSpeed;
+            boostedJumpSpeed = jumpSpeed;
             this.playerSpeed = playerSpeed;
         }
 
@@ -60,19 +63,28 @@ namespace Client._Classes
                     int newSpeed = powerUp.GetPowerUpValue(playerSpeed);
                     playerSpeed = newSpeed;
                     SetMovement(new EnhancedMovement());
-                    MovementAction(this);
+                    //MovementAction(this);
+                    activePowerUp = true;
                     break;
                 case PowerUpType.Healing:
                     int newHealth = powerUp.GetPowerUpValue(health);
                     health = newHealth;
                     break;
                 case PowerUpType.JumpBoost:
-                    int newJumpheight = powerUp.GetPowerUpValue(jumpSpeed);
-                    jumpSpeed = newJumpheight;
+                    int newJumpheight = powerUp.GetPowerUpValue(boostedJumpSpeed);
+                    boostedJumpSpeed = newJumpheight;
                     SetMovement(new EnhancedMovement());
-                    MovementAction(this);
+                    // MovementAction(this);
+                    activePowerUp = true;
                     break;
             }
+        }
+
+        public void RemovePowerUp()
+        {
+            SetMovement(new NormalMovement());
+            MovementAction(this);
+            activePowerUp = false;
         }
     }
 }

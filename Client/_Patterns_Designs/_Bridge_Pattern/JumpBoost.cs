@@ -16,15 +16,15 @@
         public override int GetPowerUpValue(int jumpingHeight)
         {
             int newValue;
-            if (jumpingHeight == 15)
+            if (jumpingHeight == -20)
             {
-                newValue = 15;
+                newValue = -20;
             }
             else
             {
-                newValue = jumpingHeight + value;
+                newValue = jumpingHeight + this.value;
 
-                if (newValue >= 15) newValue = 15;
+                if (newValue < -20) newValue = -20;
             }
 
             return newValue;

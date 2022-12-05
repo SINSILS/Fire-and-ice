@@ -22,7 +22,7 @@
             }
             else
             {
-                newValue = value + speed;
+                newValue = this.value + speed;
 
                 if (newValue >= 30) newValue = 30;
             }

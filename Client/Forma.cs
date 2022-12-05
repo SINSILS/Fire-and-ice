@@ -8,6 +8,7 @@ using Client._Patterns_Designs._Builder_Patern;
 using Client._Patterns_Designs._Command_Pattern;
 using Client._Patterns_Designs._Decorator_Pattern;
 using Client._Patterns_Designs._Interpreter;
+using Client._Patterns_Designs._Iterator;
 using Client._Patterns_Designs._State_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
 using Client._Patterns_Designs._Template_Pattern;
@@ -37,7 +38,9 @@ namespace Client
 
         Obstacle obs, clone;
 
-        SpeedBoost speedPowerUp = new SpeedBoost(13);
+        ConcreteAggregate concreteAggregate = new ConcreteAggregate();
+        Iterator iterator;
+        PowerUp powerUp;
 
         int speed, speedVertical;
 
@@ -51,6 +54,8 @@ namespace Client
         LabelUpdater powerup = new PowerupUpdate();
 
         Door doors = new Door(new ClosedDoorState());
+
+        int timePassed = 0;
 
         public Forma()
         {
@@ -129,6 +134,16 @@ namespace Client
             }
 
             Console.WriteLine(context.Output);
+
+            //PowerUp iterator
+            concreteAggregate[0] = new SpeedBoost(13);
+            concreteAggregate[1] = new JumpBoost(-10);
+            concreteAggregate[2] = new Healing(1);
+            concreteAggregate[3] = new SpeedBoost(7);
+
+            iterator = concreteAggregate.CreateIterator();
+
+            powerUp = iterator.First();
         }
 
         private async void AsignPlayers()
@@ -165,6 +180,7 @@ namespace Client
 
         private void gameTimer_TickAsync(object sender, EventArgs e)
         {
+            timePassed += 1;
             txtScore.Text = "Score: " + score.value;
 
             player.Top += playerStats.jumpSpeed;
@@ -327,19 +343,24 @@ namespace Client
                         }
                     }
 
-                    if ((string)x.Tag == "speedPowerUp")
+                    if ((string)x.Tag == "PowerUp")
                     {
-                        if (player.Bounds.IntersectsWith(x.Bounds) && speedPowerUp.isCollected == false)
+                        if (x.Visible && player.Bounds.IntersectsWith(x.Bounds) && powerUp.isCollected == false && !playerStats.activePowerUp)
                         {
                             x.Visible = false;
-                            speedPowerUp.isCollected = true;
-                            playerStats.ApplyPowerUp(speedPowerUp);
+                            powerUp.isCollected = true;
+                            playerStats.ApplyPowerUp(powerUp);
+                            timePassed = 0;
                             SendPowerUpState_Async(x.Name);
                             powerup.Update();
+                            powerUp = iterator.Next();
                             //SelectedGun selectedGun = new PistolWeapon();
                             //selectedGun.SelectNewGun();
                         }
                     }
+
+                    if (playerStats.activePowerUp && timePassed >= 60) playerStats.RemovePowerUp();
+                    Console.WriteLine(playerStats.jumpSpeed);
                 }
             }
             horizontalPlatform.Left -= playerStats.horizontalSpeed / 3;
@@ -431,7 +452,7 @@ namespace Client
             //    doors.Request();
             //}
 
-            if (score.value >0)
+            if (score.value > 0)
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
                 doors.Request();

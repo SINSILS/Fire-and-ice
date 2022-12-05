@@ -6,8 +6,8 @@ namespace Client._Patterns_Designs._Strategy_Patern
     {
         public override void DoMovement(GamePlayer player)
         {
-            player.jumpSpeed = -20;
-            player.playerSpeed = 20;
+            player.jumpSpeed = player.boostedJumpSpeed;
+            player.playerSpeed = player.playerSpeed;
         }
     }
 }

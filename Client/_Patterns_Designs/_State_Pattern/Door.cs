@@ -15,7 +15,7 @@
             set
             {
                 state = value;
-                Console.WriteLine("State: " + state.GetType().Name);
+                //Console.WriteLine("State: " + state.GetType().Name);
             }
 
         }
