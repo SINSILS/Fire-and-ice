@@ -7,6 +7,7 @@ using Client._Patterns_Designs._Bridge_Pattern;
 using Client._Patterns_Designs._Builder_Patern;
 using Client._Patterns_Designs._Command_Pattern;
 using Client._Patterns_Designs._Decorator_Pattern;
+using Client._Patterns_Designs._Interpreter;
 using Client._Patterns_Designs._State_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
 using Client._Patterns_Designs._Template_Pattern;
@@ -112,6 +113,22 @@ namespace Client
             speedVertical = vertical.Speed;
 
             doors.picBox = door;
+
+
+            Expression[] expressions = new Expression[]
+{
+    new TenExpression(),
+    new OneExpression(),
+};
+
+            var context = new Context(99);
+
+            foreach (var expression in expressions)
+            {
+                expression.Interpret(context);
+            }
+
+            Console.WriteLine(context.Output);
         }
 
         private async void AsignPlayers()
