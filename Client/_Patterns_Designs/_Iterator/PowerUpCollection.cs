@@ -2,12 +2,12 @@
 
 namespace Client._Patterns_Designs._Iterator
 {
-    public class ConcreteAggregate : Aggregate
+    public class PowerUpCollection : IAbstractCollection
     {
         List<PowerUp> items = new List<PowerUp>();
         public override Iterator CreateIterator()
         {
-            return new ConcreteIterator(this);
+            return new PowerUpIterator(this);
         }
         // Get item count
         public int Count

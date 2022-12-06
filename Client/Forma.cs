@@ -38,7 +38,7 @@ namespace Client
 
         Obstacle obs, clone;
 
-        ConcreteAggregate concreteAggregate = new ConcreteAggregate();
+        PowerUpCollection concreteAggregate = new PowerUpCollection();
         Iterator iterator;
         PowerUp powerUp;
 
@@ -144,6 +144,17 @@ namespace Client
             iterator = concreteAggregate.CreateIterator();
 
             powerUp = iterator.First();
+
+            //Army army = new Army();
+            //army.Add(new SpeedDemon(5, 1));
+            //army.Add(new CrackDemon(1, 1));
+            //Army army1 = new Army();
+            //army1.Add(new SpeedDemon(5, 5));
+            //army1.Add(new SpeedDemon(3, 3));
+            //army.Add(army1);
+            //army.Add(new CrackDemon(10, 10));
+
+            //army.Display(1);
         }
 
         private async void AsignPlayers()
@@ -360,7 +371,6 @@ namespace Client
                     }
 
                     if (playerStats.activePowerUp && timePassed >= 60) playerStats.RemovePowerUp();
-                    Console.WriteLine(playerStats.jumpSpeed);
                 }
             }
             horizontalPlatform.Left -= playerStats.horizontalSpeed / 3;

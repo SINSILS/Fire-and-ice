@@ -2,7 +2,7 @@
 {
     public class Door
     {
-        public PictureBox picBox;
+        public PictureBox? picBox;
         State state;
         public Door(State state)
         {

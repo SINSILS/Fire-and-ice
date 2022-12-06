@@ -6,6 +6,7 @@
         {
             this.Speed = speed;
             this.Damage = damage;
+            this.Name = "Crack Demon";
         }
     }
 }

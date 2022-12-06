@@ -2,13 +2,13 @@
 
 namespace Client._Patterns_Designs._Iterator
 {
-    public class ConcreteIterator : Iterator
+    public class PowerUpIterator : Iterator
     {
-        ConcreteAggregate aggregate;
+        PowerUpCollection aggregate;
         int current = 0;
 
         // Constructor
-        public ConcreteIterator(ConcreteAggregate aggregate)
+        public PowerUpIterator(PowerUpCollection aggregate)
         {
             this.aggregate = aggregate;
         }
