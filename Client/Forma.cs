@@ -9,6 +9,7 @@ using Client._Patterns_Designs._Command_Pattern;
 using Client._Patterns_Designs._Decorator_Pattern;
 using Client._Patterns_Designs._Interpreter;
 using Client._Patterns_Designs._Iterator;
+using Client._Patterns_Designs._Proxy_Pattern;
 using Client._Patterns_Designs._State_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
 using Client._Patterns_Designs._Template_Pattern;
@@ -53,7 +54,7 @@ namespace Client
         LabelUpdater threecoiner = new ThreeCoinUpdate();
         LabelUpdater powerup = new PowerupUpdate();
 
-        Door doors = new Door(new ClosedDoorState());
+        Proxy doors = new Proxy();
 
         int timePassed = 0;
 
@@ -117,7 +118,9 @@ namespace Client
             vertical.CreatePlatform();
             speedVertical = vertical.Speed;
 
-            doors.picBox = door;
+            doors.createDoor(new ClosedDoorState());
+            doors.setPicBox(door);
+
 
 
             Expression[] expressions = new Expression[]
@@ -420,7 +423,7 @@ namespace Client
                 moveEnemyOneRight = !moveEnemyOneRight;
             }
 
-            if (player1.Bounds.IntersectsWith(doors.picBox.Bounds) && doors.State.GetType().Name == "OpenDoorState")
+            if (player1.Bounds.IntersectsWith(doors.getPicBox().Bounds) && doors.getState().GetType().Name == "OpenDoorState")
             {
                 // gameTimer.Stop();
                 //playerStats.isGameOver = true;
@@ -432,7 +435,7 @@ namespace Client
                 gameTimer.Stop();
                 newLevel.Show();
             }
-            if (player2.Bounds.IntersectsWith(doors.picBox.Bounds) && doors.State.GetType().Name == "OpenDoorState")
+            if (player2.Bounds.IntersectsWith(doors.getPicBox().Bounds) && doors.getState().GetType().Name == "OpenDoorState")
             {
                 // gameTimer.Stop();
                 //playerStats.isGameOver = true;
@@ -445,13 +448,7 @@ namespace Client
                 newLevel.Show();
             }
 
-            //if (score.value == 36 && doors.State.GetType().Name == "ClosedDoorState")
-            //{
-            //    txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
-            //    doors.Request();
-            //}
-
-            if (score.value > 0)
+            if (score.value == 36 && doors.getState().GetType().Name == "ClosedDoorState" && lever.isActivated)
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
                 doors.Request();
@@ -682,7 +679,7 @@ namespace Client
             score.value = 0;
             gameTimer.Start();
 
-            if (doors.State.GetType().Name == "OpenDoorState")
+            if (doors.getState().GetType().Name == "OpenDoorState")
             {
                 doors.Request();
             }

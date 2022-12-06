@@ -16,12 +16,16 @@
             Form currentForm = Form.ActiveForm;
             try
             {
-                Label? t = currentForm.Controls["updateLabel"] as Label;
-                if (t != null)
+                if (currentForm != null)
                 {
-                    t.Visible = true;
+                    Label? t = currentForm.Controls["updateLabel"] as Label;
+                    if (t != null)
+                    {
+                        t.Visible = true;
+                    }
                 }
             }
+
             catch (NullReferenceException)
             {
                 //?
@@ -31,18 +35,22 @@
         private async void HideLabel()
         {
             Form currentForm = Form.ActiveForm;
-            try
+            if (currentForm != null)
             {
-                Label? t = currentForm.Controls["updateLabel"] as Label;
-                if (t != null)
+                try
                 {
-                    await Task.Delay(3000);
-                    t.Visible = false;
+                    Label? t = currentForm.Controls["updateLabel"] as Label;
+                    if (t != null)
+                    {
+                        await Task.Delay(3000);
+                        t.Visible = false;
+                    }
+
                 }
-            }
-            catch  (NullReferenceException)
-            {
-                //?
+                catch (NullReferenceException)
+                {
+                    //?
+                }
             }
         }
     }

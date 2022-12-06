@@ -5,6 +5,7 @@ using Client._Classes.Factories;
 using Client._Patterns_Designs._Adapter_Pattern;
 using Client._Patterns_Designs._Builder_Patern;
 using Client._Patterns_Designs._Decorator_Pattern;
+using Client._Patterns_Designs._Proxy_Pattern;
 using Client._Patterns_Designs._State_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
 using Client._Patterns_Designs._Template_Pattern;
@@ -38,7 +39,7 @@ namespace Client
         LabelUpdater twocoiner = new TwoCoinUpdate();
         LabelUpdater threecoiner = new ThreeCoinUpdate();
 
-        Door doors = new Door(new ClosedDoorState());
+        Proxy doors = new Proxy();
         public Level2()
         {
             InitializeComponent();
@@ -93,7 +94,8 @@ namespace Client
             VerticalPlatformDecorator vertical = new VerticalPlatformDecorator(createdPlatform2);
             vertical.CreatePlatform();
 
-            doors.picBox = door;
+            doors.createDoor(new ClosedDoorState());
+            doors.setPicBox(door);
         }
         private async void AsignPlayers()
         {
@@ -270,25 +272,24 @@ namespace Client
                 playerStats.verticalSpeed = playerStats.verticalSpeed * -1;
             }
 
-            //if ((score.value == 67 || score.value == 31) && doors.State.GetType().Name == "ClosedDoorState")
-            //{
-            //    txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
-            //    doors.Request();
-            //}
-
-            if (score.value > 0)
+            if ((score.value == 67 || score.value == 31) && doors.getState().GetType().Name == "ClosedDoorState")
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
                 doors.Request();
             }
 
-            if (score.value == 36)
+            if (score.value == 67)
+            {
+                txtScore.Text = "Score: " + score.value + Environment.NewLine + "Your quest is complete!";
+            }
+
+            if (score.value < 32)
             {
                 txtScore.Text = "Score: " + score.value + Environment.NewLine + "Collect coins to complete the quest!";
             }
 
 
-            if (player1.Bounds.IntersectsWith(doors.picBox.Bounds) && doors.State.GetType().Name == "OpenDoorState")
+            if (player1.Bounds.IntersectsWith(doors.getPicBox().Bounds) && doors.getState().GetType().Name == "OpenDoorState")
             {
                 // gameTimer.Stop();
                 //playerStats.isGameOver = true;
@@ -299,7 +300,7 @@ namespace Client
                 gameTimer2.Stop();
                 newLevel.Show();
             }
-            if (player2.Bounds.IntersectsWith(doors.picBox.Bounds) && doors.State.GetType().Name == "OpenDoorState")
+            if (player2.Bounds.IntersectsWith(doors.getPicBox().Bounds) && doors.getState().GetType().Name == "OpenDoorState")
             {
                 // gameTimer.Stop();
                 //playerStats.isGameOver = true;

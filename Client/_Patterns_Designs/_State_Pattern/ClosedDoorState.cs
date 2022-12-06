@@ -4,8 +4,8 @@
     {
         public override void Handle(Door door)
         {
-            door.State = new OpenDoorState();
-            door.picBox.BackColor = Color.Green;
+            door.setState(new OpenDoorState());
+            door.getPicBox().BackColor = Color.Green;
         }
     }
 }
