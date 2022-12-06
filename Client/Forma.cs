@@ -144,17 +144,6 @@ namespace Client
             iterator = concreteAggregate.CreateIterator();
 
             powerUp = iterator.First();
-
-            //Army army = new Army();
-            //army.Add(new SpeedDemon(5, 1));
-            //army.Add(new CrackDemon(1, 1));
-            //Army army1 = new Army();
-            //army1.Add(new SpeedDemon(5, 5));
-            //army1.Add(new SpeedDemon(3, 3));
-            //army.Add(army1);
-            //army.Add(new CrackDemon(10, 10));
-
-            //army.Display(1);
         }
 
         private async void AsignPlayers()
