@@ -8,7 +8,12 @@ namespace Client._Patterns_Designs._State_Pattern
         State state;
         public Door(State state)
         {
-            this.state = state;
+            if (state != null)
+            {
+                this.state = state;
+            }
+            else
+                throw new ArgumentNullException();
         }
 
         public override void createDoor(State state)
