@@ -3,5 +3,6 @@
     public abstract class IAbstractCollection
     {
         public abstract Iterator CreateIterator();
+        public abstract void ResetItemState();
     }
 }

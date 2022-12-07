@@ -20,5 +20,10 @@ namespace Client._Patterns_Designs._Iterator
             get { return items[index]; }
             set { items.Insert(index, value); }
         }
+
+        public override void ResetItemState()
+        {
+            foreach (PowerUp powerUp in items) powerUp.isCollected = false;
+        }
     }
 }

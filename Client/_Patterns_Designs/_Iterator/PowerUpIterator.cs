@@ -4,19 +4,19 @@ namespace Client._Patterns_Designs._Iterator
 {
     public class PowerUpIterator : Iterator
     {
-        PowerUpCollection aggregate;
+        PowerUpCollection powerUpCollection;
         int current = 0;
 
         // Constructor
-        public PowerUpIterator(PowerUpCollection aggregate)
+        public PowerUpIterator(PowerUpCollection powerUpCollection)
         {
-            this.aggregate = aggregate;
+            this.powerUpCollection = powerUpCollection;
         }
 
         // Gets first iteration item
         public override PowerUp First()
         {
-            return aggregate[0];
+            return powerUpCollection[0];
         }
 
         // Gets next iteration item
@@ -24,9 +24,9 @@ namespace Client._Patterns_Designs._Iterator
         {
             PowerUp ret = null;
 
-            if (current < aggregate.Count - 1)
+            if (current < powerUpCollection.Count - 1)
             {
-                ret = aggregate[++current];
+                ret = powerUpCollection[++current];
             }
 
             return ret;
@@ -35,13 +35,19 @@ namespace Client._Patterns_Designs._Iterator
         // Gets current iteration item
         public override PowerUp CurrentItem()
         {
-            return aggregate[current];
+            return powerUpCollection[current];
         }
 
         // Gets whether iterations are complete
         public override bool IsDone()
         {
-            return current >= aggregate.Count;
+            return current >= powerUpCollection.Count;
+        }
+
+        public override void ResetIterator()
+        {
+            current = 0;
+            powerUpCollection.ResetItemState();
         }
     }
 }

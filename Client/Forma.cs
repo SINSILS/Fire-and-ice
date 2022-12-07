@@ -7,6 +7,7 @@ using Client._Patterns_Designs._Bridge_Pattern;
 using Client._Patterns_Designs._Builder_Patern;
 using Client._Patterns_Designs._Command_Pattern;
 using Client._Patterns_Designs._Decorator_Pattern;
+using Client._Patterns_Designs._Flyweight_Pattern;
 using Client._Patterns_Designs._Interpreter;
 using Client._Patterns_Designs._Iterator;
 using Client._Patterns_Designs._Proxy_Pattern;
@@ -129,11 +130,11 @@ namespace Client
 
 
 
-//            Expression[] expressions = new Expression[]
-//{
-//    new TenExpression(),
-//    new OneExpression(),
-//};
+            //            Expression[] expressions = new Expression[]
+            //{
+            //    new TenExpression(),
+            //    new OneExpression(),
+            //};
 
             //var context = new Context(99);
 
@@ -144,11 +145,19 @@ namespace Client
 
             //Console.WriteLine(context.Output);
 
+            //PowerUp Flyweight
+            PowerUpFactory powerUpFactory = new PowerUpFactory();
+
+            PowerUp speedPowerUp = new SpeedBoost(13);
+            PowerUp jumpPowerUp = new JumpBoost(-10);
+            PowerUp healPowerUp = new Healing(1);
+
             //PowerUp iterator
-            concreteAggregate[0] = new SpeedBoost(13);
-            concreteAggregate[1] = new JumpBoost(-10);
-            concreteAggregate[2] = new Healing(1);
-            concreteAggregate[3] = new SpeedBoost(7);
+            concreteAggregate[0] = powerUpFactory.GetPowerUp(speedPowerUp.GetPowerUpType() + " " + speedPowerUp.value);
+            concreteAggregate[1] = powerUpFactory.GetPowerUp(jumpPowerUp.GetPowerUpType() + " " + jumpPowerUp.value);
+            concreteAggregate[2] = powerUpFactory.GetPowerUp(healPowerUp.GetPowerUpType() + " " + healPowerUp.value);
+            speedPowerUp = new SpeedBoost(7);
+            concreteAggregate[3] = powerUpFactory.GetPowerUp(speedPowerUp.GetPowerUpType() + " " + speedPowerUp.value);
 
             iterator = concreteAggregate.CreateIterator();
 
@@ -698,6 +707,9 @@ namespace Client
             {
                 doors.Request();
             }
+
+            iterator.ResetIterator();
+            powerUp = iterator.First();
         }
 
         //Builds all coins parts and puts them into Dictionary for player

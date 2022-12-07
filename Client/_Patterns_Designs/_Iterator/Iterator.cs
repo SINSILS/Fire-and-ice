@@ -8,5 +8,6 @@ namespace Client._Patterns_Designs._Iterator
         public abstract PowerUp Next();
         public abstract bool IsDone();
         public abstract PowerUp CurrentItem();
+        public abstract void ResetIterator();
     }
 }
