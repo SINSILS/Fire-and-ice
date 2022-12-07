@@ -2,7 +2,7 @@
 
 namespace Client._Patterns_Designs._Builder_Patern
 {
-    class RedCoinBuilder : IBuilder
+    public class RedCoinBuilder : IBuilder
     {
         private Coin coin = new Coin();
         public void AddRing()

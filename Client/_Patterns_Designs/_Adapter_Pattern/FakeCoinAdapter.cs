@@ -14,5 +14,10 @@ namespace Client._Patterns_Designs._Adapter_Pattern
             coin.picBox.BackColor = Color.White;
             coin.value = 0;
         }
+
+        public int getValue()
+        {
+            return coin.value;
+        }
     }
 }
