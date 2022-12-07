@@ -11,20 +11,9 @@ namespace Client._Patterns_Designs._State_Pattern
             this.state = state;
         }
 
-        //public State State
-        //{
-        //    get { return state; }
-        //    set
-        //    {
-        //        state = value;
-        //        //Console.WriteLine("State: " + state.GetType().Name);
-        //    }
-        //}
-
         public override void createDoor(State state)
         {
             Door newDoor = new Door(state);
-            //return newDoor;
         }
 
         public override void Request()
