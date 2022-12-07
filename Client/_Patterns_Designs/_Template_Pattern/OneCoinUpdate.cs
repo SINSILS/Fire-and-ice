@@ -10,11 +10,21 @@ namespace Client._Patterns_Designs._Template_Pattern
     {
         public override void LabelText()
         {
-            Form currentForm = Form.ActiveForm;
-            Label? t = currentForm.Controls["updateLabel"] as Label;
-            if (t != null)
+            try
             {
-                t.Text = "You got one coin!";
+                Form currentForm = Form.ActiveForm;
+                if (currentForm != null)
+                {
+                    Label? t = currentForm.Controls["updateLabel"] as Label;
+                    if (t != null)
+                    {
+                        t.Text = "You got one coin!";
+                    }
+                }
+            }
+            catch (NullReferenceException)
+            {
+                throw;
             }
         }
     }

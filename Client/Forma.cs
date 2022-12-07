@@ -58,6 +58,12 @@ namespace Client
 
         int timePassed = 0;
 
+        Expression[] expressions = new Expression[]
+{
+    new TenExpression(),
+    new OneExpression(),
+};
+
         public Forma()
         {
             InitializeComponent();
@@ -123,11 +129,11 @@ namespace Client
 
 
 
-            Expression[] expressions = new Expression[]
-{
-    new TenExpression(),
-    new OneExpression(),
-};
+//            Expression[] expressions = new Expression[]
+//{
+//    new TenExpression(),
+//    new OneExpression(),
+//};
 
             var context = new Context(99);
 
@@ -184,7 +190,16 @@ namespace Client
         private void gameTimer_TickAsync(object sender, EventArgs e)
         {
             timePassed += 1;
-            txtScore.Text = "Score: " + score.value;
+            //txtScore.Text = "Score: " + score.value;
+
+            var context = new Context(score.value);
+            foreach (var expression in expressions)
+            {
+                expression.Interpret(context);
+            }
+
+            //Console.WriteLine(context.Output);
+            txtScore.Text = "Score: " + context.Output;
 
             player.Top += playerStats.jumpSpeed;
 

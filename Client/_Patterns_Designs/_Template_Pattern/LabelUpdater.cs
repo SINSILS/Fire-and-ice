@@ -13,9 +13,10 @@
 
         private void ShowLabel()
         {
-            Form currentForm = Form.ActiveForm;
             try
             {
+                Form currentForm = Form.ActiveForm;
+
                 if (currentForm != null)
                 {
                     Label? t = currentForm.Controls["updateLabel"] as Label;
@@ -25,19 +26,18 @@
                     }
                 }
             }
-
-            catch (NullReferenceException)
+            catch(NullReferenceException)
             {
-                //?
+                throw;
             }
         }
 
         private async void HideLabel()
         {
-            Form currentForm = Form.ActiveForm;
-            if (currentForm != null)
+            try
             {
-                try
+                Form currentForm = Form.ActiveForm;
+                if (currentForm != null)
                 {
                     Label? t = currentForm.Controls["updateLabel"] as Label;
                     if (t != null)
@@ -47,10 +47,10 @@
                     }
 
                 }
-                catch (NullReferenceException)
-                {
-                    //?
-                }
+            }
+            catch (NullReferenceException)
+            {
+                throw;
             }
         }
     }
