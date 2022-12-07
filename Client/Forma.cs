@@ -135,14 +135,14 @@ namespace Client
 //    new OneExpression(),
 //};
 
-            var context = new Context(99);
+            //var context = new Context(99);
 
-            foreach (var expression in expressions)
-            {
-                expression.Interpret(context);
-            }
+            //foreach (var expression in expressions)
+            //{
+            //    expression.Interpret(context);
+            //}
 
-            Console.WriteLine(context.Output);
+            //Console.WriteLine(context.Output);
 
             //PowerUp iterator
             concreteAggregate[0] = new SpeedBoost(13);
@@ -198,7 +198,7 @@ namespace Client
                 expression.Interpret(context);
             }
 
-            //Console.WriteLine(context.Output);
+            Console.WriteLine(context.Output);
             txtScore.Text = "Score: " + context.Output;
 
             player.Top += playerStats.jumpSpeed;

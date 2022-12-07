@@ -5,6 +5,7 @@ using Client._Classes.Factories;
 using Client._Patterns_Designs._Adapter_Pattern;
 using Client._Patterns_Designs._Builder_Patern;
 using Client._Patterns_Designs._Decorator_Pattern;
+using Client._Patterns_Designs._Interpreter;
 using Client._Patterns_Designs._Strategy_Patern;
 using Client._Patterns_Designs._Template_Pattern;
 using Client._Patterns_Designs.Observer;
@@ -34,6 +35,12 @@ namespace Client
         Obstacle obs, clone;
 
         int speed;
+
+        Expression[] expressions = new Expression[]
+{
+    new TenExpression(),
+    new OneExpression(),
+};
         public Level3()
         {
             InitializeComponent();
@@ -122,7 +129,15 @@ namespace Client
 
         private void gameTimer2_TickAsync(object sender, EventArgs e)
         {
-            txtScore.Text = "Score: " + score.value;
+            //txtScore.Text = "Score: " + score.value;
+            var context = new Context(score.value);
+            foreach (var expression in expressions)
+            {
+                expression.Interpret(context);
+            }
+
+            Console.WriteLine(context.Output);
+            txtScore.Text = "Score: " + context.Output;
 
             player.Top += playerStats.jumpSpeed;
 
