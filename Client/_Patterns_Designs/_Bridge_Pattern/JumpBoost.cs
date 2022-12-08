@@ -1,6 +1,6 @@
 ﻿namespace Client._Patterns_Designs._Bridge_Pattern
 {
-    internal class JumpBoost : PowerUp
+    public class JumpBoost : PowerUp
     {
         public JumpBoost(int value)
         {

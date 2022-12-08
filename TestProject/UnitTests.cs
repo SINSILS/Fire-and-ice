@@ -1,4 +1,7 @@
 using Client._Classes;
+using Client._Classes.AbstractFactories;
+using Client._Classes.AbstractProducts;
+using Client._Classes.Factories;
 using Client._Patterns_Designs._Adapter_Pattern;
 using Client._Patterns_Designs._Bridge_Pattern;
 using Client._Patterns_Designs._Builder_Patern;
@@ -59,10 +62,20 @@ namespace TestProject
         public void ApplyHealthPowerUp()
         {
             GamePlayer player = new(3, 2, 4, 5, 6, 7);
-            Healing HealingPotion = new Healing(13);
-            var playerHealth = player.health;
+            Healing HealingPotion = new Healing(1);
+            player.LowerHealth(2);
             player.ApplyPowerUp(HealingPotion);
-            Assert.True(player.health > playerHealth);
+            Assert.True(player.health == 2);
+        }
+
+        [Fact]
+        public void ApplyJumpPowerUp()
+        {
+            GamePlayer player = new(3, 2, 4, 5, 6, 7);
+            int playerJumpSpeed = player.boostedJumpSpeed;
+            JumpBoost jumpPowerUp = new JumpBoost(-10);
+            player.ApplyPowerUp(jumpPowerUp);
+            Assert.True(player.boostedJumpSpeed < playerJumpSpeed);
         }
 
         [Fact]
@@ -137,6 +150,93 @@ namespace TestProject
             FakeCoinAdapter fakeCoin = new FakeCoinAdapter(coin);
             fakeCoin.isFake();
             Assert.True(realValue != fakeCoin.getValue());
+        }
+
+        [Fact]
+        public void SpeedPowerUpValue()
+        {
+            SpeedBoost speedPowerUp = new SpeedBoost(10);
+            int value = speedPowerUp.GetPowerUpValue(7);
+            int expectedValue = 17;
+            Assert.True(value == expectedValue);
+        }
+
+        [Fact]
+        public void HealingPowerUpValue()
+        {
+            Healing healPowerUp = new Healing(10);
+            int value = healPowerUp.GetPowerUpValue(2);
+            int expectedValue = 3;
+            Assert.True(value == expectedValue);
+        }
+
+        [Fact]
+        public void JumpPowerUpValue()
+        {
+            JumpBoost jumpPowerUp = new JumpBoost(-10);
+            int value = jumpPowerUp.GetPowerUpValue(-8);
+            int expectedValue = -18;
+            Assert.True(value == expectedValue);
+        }
+
+        [Fact]
+        public void Level1Factory()
+        {
+            LevelFactory levelFactory = new Level1Factory();
+            Interactable lever = levelFactory.CreateInteractableLever();
+            Interactable pressurePlate = levelFactory.CreateInteractablePressurePlate();
+
+            Assert.True((lever.color == "None") && (pressurePlate.color == "None"));
+        }
+
+        [Fact]
+        public void Level2Factory()
+        {
+            LevelFactory levelFactory = new Level2Factory();
+            Interactable lever = levelFactory.CreateInteractableLever();
+            Interactable pressurePlate = levelFactory.CreateInteractablePressurePlate();
+
+            Assert.True((lever.color == "Red") && (pressurePlate.color == "Blue"));
+        }
+
+        [Fact]
+        public void Level3Factory()
+        {
+            LevelFactory levelFactory = new Level3Factory();
+            Interactable lever = levelFactory.CreateInteractableLever();
+            Interactable pressurePlate = levelFactory.CreateInteractablePressurePlate();
+
+            Assert.True((lever.color == "Blue") && (pressurePlate.color == "Red"));
+        }
+
+        [Fact]
+        public void LeverActivated()
+        {
+            LevelFactory levelFactory = new Level3Factory();
+            Interactable lever = levelFactory.CreateInteractableLever();
+            lever.SetActivated(true);
+
+            Assert.True(lever.isActivated == true);
+        }
+
+        [Fact]
+        public void LeverDeactivated()
+        {
+            LevelFactory levelFactory = new Level3Factory();
+            Interactable lever = levelFactory.CreateInteractableLever();
+            lever.SetActivated(false);
+
+            Assert.True(lever.isActivated == false);
+        }
+
+        [Fact]
+        public void PressurePlateDeactivated()
+        {
+            LevelFactory levelFactory = new Level3Factory();
+            Interactable pressurePlate = levelFactory.CreateInteractablePressurePlate();
+            pressurePlate.SetActivated(false);
+
+            Assert.True(pressurePlate.isActivated == false);
         }
     }
 }

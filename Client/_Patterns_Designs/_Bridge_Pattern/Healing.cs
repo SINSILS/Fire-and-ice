@@ -27,6 +27,7 @@
             else
             {
                 newValue = health + value;
+                if (newValue > 3) newValue = 3;
             }
 
             return newValue;
