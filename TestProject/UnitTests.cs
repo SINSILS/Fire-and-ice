@@ -238,5 +238,36 @@ namespace TestProject
 
             Assert.True(pressurePlate.isActivated == false);
         }
+
+        [Fact]
+        public void CoinScoreIntegrationTest()
+        {
+            Director director = new Director();
+            var redCoinBuilder = new RedCoinBuilder();
+            director.Construct(redCoinBuilder);
+            var coin = redCoinBuilder.GetCoin();
+            coin.picBox = new PictureBox();
+            coin.setValueAndColor();
+
+            Score score = Score.getInstance();
+
+            score.increaseScore(coin.value);
+
+            Assert.True(score.value == 3);
+        }
+
+        [Fact]
+        public void PlayerEnemyDamageHealIntegrationTest()
+        {
+            GamePlayer player = new(3, 2, 4, 5, 6, 7);
+            Healing HealingPotion = new Healing(1);
+            Enemy enemy = EnemyFactory.getEnemy("SpeedDemon");
+
+            player.LowerHealth(enemy.Damage);
+            Assert.True(player.health == 2);
+            player.LowerHealth(enemy.Damage);
+            player.ApplyPowerUp(HealingPotion);
+            Assert.True(player.health == 2);
+        }
     }
 }
