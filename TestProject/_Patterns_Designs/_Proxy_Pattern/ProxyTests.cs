@@ -1,50 +1,31 @@
-namespace Test._Patterns_Designs._State_Pattern
+namespace Test._Patterns_Designs._Proxy_Pattern
 {
+    using Client._Patterns_Designs._Proxy_Pattern;
     using Client._Patterns_Designs._State_Pattern;
     using System;
     using System.Windows.Forms;
     using Xunit;
 
-    public class DoorTests
+    public class ProxyTests
     {
-        private Door _testClass;
-        private State _state;
+        private Proxy _testClass;
 
-
-        public DoorTests()
+        public ProxyTests()
         {
-            _state = new ClosedDoorState();
-            _testClass = new Door(_state);
-            _testClass.setPicBox(new PictureBox());
-        }
-
-        [Fact]
-        public void CanConstruct()
-        {
-            // Act
-            var instance = new Door(_state);
-
-            // Assert
-            Assert.NotNull(instance);
-        }
-
-        [Fact]
-        public void CannotConstructWithNullState()
-        {
-            Assert.Throws<ArgumentNullException>(() => new Door(default(State)));
+            _testClass = new Proxy();
         }
 
         [Fact]
         public void CanCallcreateDoor()
         {
             // Arrange
-            var state = new ClosedDoorState();
+            var state = new OpenDoorState();
 
             // Act
             _testClass.createDoor(state);
 
             // Assert
-            Assert.NotNull(_testClass.getState());
+            throw new NotImplementedException("Create or modify test");
         }
 
         [Fact]
@@ -57,11 +38,10 @@ namespace Test._Patterns_Designs._State_Pattern
         public void CanCallRequest()
         {
             // Act
-            State firstState = _testClass.getState();
             _testClass.Request();
-            State secondState = _testClass.getState();
+
             // Assert
-            Assert.NotEqual(firstState.GetType().Name, secondState.GetType().Name);
+            throw new NotImplementedException("Create or modify test");
         }
 
         [Fact]
@@ -74,7 +54,7 @@ namespace Test._Patterns_Designs._State_Pattern
             _testClass.setPicBox(pickBox);
 
             // Assert
-            Assert.NotNull(_testClass.getState());
+            throw new NotImplementedException("Create or modify test");
         }
 
         [Fact]
@@ -90,7 +70,7 @@ namespace Test._Patterns_Designs._State_Pattern
             var result = _testClass.getPicBox();
 
             // Assert
-            Assert.NotNull(result);
+            throw new NotImplementedException("Create or modify test");
         }
 
         [Fact]
@@ -100,21 +80,20 @@ namespace Test._Patterns_Designs._State_Pattern
             var result = _testClass.getState();
 
             // Assert
-            Assert.NotNull(result);
+            throw new NotImplementedException("Create or modify test");
         }
 
         [Fact]
         public void CanCallsetState()
         {
             // Arrange
-            var firstState = _testClass.getState();
-            var secondState = new OpenDoorState();
+            var state = new ClosedDoorState();
 
             // Act
-            _testClass.setState(secondState);
+            _testClass.setState(state);
 
             // Assert
-            Assert.Equal(_testClass.getState().GetType().Name, secondState.GetType().Name);
+            throw new NotImplementedException("Create or modify test");
         }
 
         [Fact]

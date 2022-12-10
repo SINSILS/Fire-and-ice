@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Client._Patterns_Designs._Interpreter
+﻿namespace Client._Patterns_Designs._Interpreter
 {
     public class TenExpression : Expression
     {
         public override void Interpret(Context value)
         {
+            if (value == null) { throw new ArgumentNullException(); }
             while ((value.Input - 90) >= 0)
             {
                 value.Output += "XC";

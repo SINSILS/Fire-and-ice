@@ -122,7 +122,7 @@ namespace TestProject
         {
             var startState = new ClosedDoorState();
             Proxy doors = new Proxy();
-            doors.createDoor(new ClosedDoorState());
+            doors.createDoor(startState);
             doors.setPicBox(new PictureBox());
             doors.Request();
             Assert.True(doors.getState().GetType().Name != startState.GetType().Name);

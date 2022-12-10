@@ -7,6 +7,7 @@ namespace Client._Patterns_Designs._Adapter_Pattern
         private Coin coin;
         public FakeCoinAdapter(Coin coin)
         {
+            if (coin == null) { throw new ArgumentNullException(); }
             this.coin = coin;
         }
         public void isFake()

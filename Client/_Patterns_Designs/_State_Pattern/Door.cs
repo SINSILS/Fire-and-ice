@@ -28,6 +28,7 @@ namespace Client._Patterns_Designs._State_Pattern
 
         public override void setPicBox(PictureBox pickBox)
         {
+            if (pickBox == null) { throw new ArgumentNullException(); }
             this.picBox = pickBox;
         }
 
@@ -42,6 +43,7 @@ namespace Client._Patterns_Designs._State_Pattern
 
         public override void setState(State state)
         {
+            if (state == null) { throw new ArgumentNullException(); }
             this.state = state;
         }
     }
