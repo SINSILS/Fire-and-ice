@@ -34,6 +34,7 @@ namespace TestProject
             horizontal.CreatePlatform();
             Assert.True(horizontal.Speed > 0);
         }
+
         [Fact]
         public void DamageTest()
         {
@@ -41,6 +42,7 @@ namespace TestProject
             player.LowerHealth(2);
             Assert.True(player.health == 1);
         }
+
         [Fact]
         public void MovementTest()
         {
@@ -118,38 +120,12 @@ namespace TestProject
         }
 
         [Fact]
-        public void DoorStateAfterRequest()
-        {
-            var startState = new ClosedDoorState();
-            Proxy doors = new Proxy();
-            doors.createDoor(startState);
-            doors.setPicBox(new PictureBox());
-            doors.Request();
-            Assert.True(doors.getState().GetType().Name != startState.GetType().Name);
-        }
-
-        [Fact]
         public void ScoreInstanceCheck()
         {
             Score score = Score.getInstance();
             Score score2 = Score.getInstance();
             score.increaseScore(2);
             Assert.True(score.value == score2.value);
-        }
-
-        [Fact]
-        public void FakeCoinValue()
-        {
-            Director director = new Director();
-            var redCoinBuilder = new RedCoinBuilder();
-            director.Construct(redCoinBuilder);
-            var coin = redCoinBuilder.GetCoin();
-            coin.picBox = new PictureBox();
-            coin.setValueAndColor();
-            int realValue = coin.value;
-            FakeCoinAdapter fakeCoin = new FakeCoinAdapter(coin);
-            fakeCoin.isFake();
-            Assert.True(realValue != fakeCoin.getValue());
         }
 
         [Fact]
@@ -205,7 +181,6 @@ namespace TestProject
             LevelFactory levelFactory = new Level3Factory();
             Interactable lever = levelFactory.CreateInteractableLever();
             Interactable pressurePlate = levelFactory.CreateInteractablePressurePlate();
-
             Assert.True((lever.color == "Blue") && (pressurePlate.color == "Red"));
         }
 
@@ -215,7 +190,6 @@ namespace TestProject
             LevelFactory levelFactory = new Level3Factory();
             Interactable lever = levelFactory.CreateInteractableLever();
             lever.SetActivated(true);
-
             Assert.True(lever.isActivated == true);
         }
 
@@ -225,7 +199,6 @@ namespace TestProject
             LevelFactory levelFactory = new Level3Factory();
             Interactable lever = levelFactory.CreateInteractableLever();
             lever.SetActivated(false);
-
             Assert.True(lever.isActivated == false);
         }
 
@@ -235,7 +208,6 @@ namespace TestProject
             LevelFactory levelFactory = new Level3Factory();
             Interactable pressurePlate = levelFactory.CreateInteractablePressurePlate();
             pressurePlate.SetActivated(false);
-
             Assert.True(pressurePlate.isActivated == false);
         }
 
@@ -248,11 +220,8 @@ namespace TestProject
             var coin = redCoinBuilder.GetCoin();
             coin.picBox = new PictureBox();
             coin.setValueAndColor();
-
             Score score = Score.getInstance();
-
             score.increaseScore(coin.value);
-
             Assert.True(score.value == 3);
         }
 
@@ -262,12 +231,37 @@ namespace TestProject
             GamePlayer player = new(3, 2, 4, 5, 6, 7);
             Healing HealingPotion = new Healing(1);
             Enemy enemy = EnemyFactory.getEnemy("SpeedDemon");
-
             player.LowerHealth(enemy.Damage);
             Assert.True(player.health == 2);
             player.LowerHealth(enemy.Damage);
             player.ApplyPowerUp(HealingPotion);
             Assert.True(player.health == 2);
+        }
+
+        [Fact]
+        public void DoorStateAfterRequestIntegrationTest()
+        {
+            var startState = new ClosedDoorState();
+            Proxy doors = new Proxy();
+            doors.createDoor(startState);
+            doors.setPicBox(new PictureBox());
+            doors.Request();
+            Assert.True(doors.getState().GetType().Name != startState.GetType().Name);
+        }
+
+        [Fact]
+        public void FakeCoinValueIntegrationTest()
+        {
+            Director director = new Director();
+            var redCoinBuilder = new RedCoinBuilder();
+            director.Construct(redCoinBuilder);
+            var coin = redCoinBuilder.GetCoin();
+            coin.picBox = new PictureBox();
+            coin.setValueAndColor();
+            int realValue = coin.value;
+            FakeCoinAdapter fakeCoin = new FakeCoinAdapter(coin);
+            fakeCoin.isFake();
+            Assert.True(realValue != fakeCoin.getValue());
         }
     }
 }

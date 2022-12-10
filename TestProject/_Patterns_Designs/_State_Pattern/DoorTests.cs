@@ -9,8 +9,6 @@ namespace Test._Patterns_Designs._State_Pattern
     {
         private Door _testClass;
         private State _state;
-
-
         public DoorTests()
         {
             _state = new ClosedDoorState();
@@ -23,7 +21,6 @@ namespace Test._Patterns_Designs._State_Pattern
         {
             // Act
             var instance = new Door(_state);
-
             // Assert
             Assert.NotNull(instance);
         }
@@ -39,10 +36,8 @@ namespace Test._Patterns_Designs._State_Pattern
         {
             // Arrange
             var state = new ClosedDoorState();
-
             // Act
             _testClass.createDoor(state);
-
             // Assert
             Assert.NotNull(_testClass.getState());
         }
@@ -69,10 +64,8 @@ namespace Test._Patterns_Designs._State_Pattern
         {
             // Arrange
             var pickBox = new PictureBox();
-
             // Act
             _testClass.setPicBox(pickBox);
-
             // Assert
             Assert.NotNull(_testClass.getState());
         }
