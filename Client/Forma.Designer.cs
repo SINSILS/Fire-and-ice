@@ -661,6 +661,7 @@
             this.Name = "Forma";
             this.Tag = "PowerUp";
             this.Text = "Fire And Ice";
+            this.Load += new System.EventHandler(this.Forma_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyIsDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeyIsUp);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

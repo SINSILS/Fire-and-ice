@@ -5,6 +5,7 @@ using Client._Classes.Factories;
 using Client._Patterns_Designs._Adapter_Pattern;
 using Client._Patterns_Designs._Bridge_Pattern;
 using Client._Patterns_Designs._Builder_Patern;
+using Client._Patterns_Designs._Chain_Pattern;
 using Client._Patterns_Designs._Command_Pattern;
 using Client._Patterns_Designs._Decorator_Pattern;
 using Client._Patterns_Designs._Flyweight_Pattern;
@@ -17,6 +18,7 @@ using Client._Patterns_Designs._Template_Pattern;
 using Client._Patterns_Designs.Observer;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Runtime.InteropServices;
+using Client._Patterns_Designs._Memento_pattern;
 
 namespace Client
 {
@@ -64,6 +66,10 @@ namespace Client
     new TenExpression(),
     new OneExpression(),
 };
+
+        Chain chainInteract1, chainInteract2, chainInteract3;
+        Originator originator;
+        CareTaker careTaker;
 
         public Forma()
         {
@@ -124,6 +130,17 @@ namespace Client
             VerticalPlatformDecorator vertical = new VerticalPlatformDecorator(createdPlatform2);
             vertical.CreatePlatform();
             speedVertical = vertical.Speed;
+
+            chainInteract1 = new PlatformInteraction();
+            chainInteract2 = new HorizontalInteraction();
+            chainInteract3 = new VerticalInteraction();
+
+            chainInteract1.setNextChain(chainInteract2);
+            chainInteract2.setNextChain(chainInteract3);
+
+            originator = new Originator();
+            careTaker = new CareTaker();
+
 
             doors.createDoor(new ClosedDoorState());
             doors.setPicBox(door);
@@ -240,46 +257,53 @@ namespace Client
             {
                 if (x is PictureBox)
                 {
-                    if ((string)x.Tag == "platform")
+
+                    // chain pattern tik player slysta nuo platformos kazkodel?????????????????
+                    if ((string)x.Tag == "platform" || (string)x.Tag == "Horizontal" || (string)x.Tag == "Vertical")
                     {
-                        if (player.Bounds.IntersectsWith(x.Bounds))
-                        {
-                            playerStats.force = 8;
-                            player.Top = x.Top - player.Height;
-
-
-                            if ((string)x.Name == "horizontalPlatform" && playerStats.goLeft == false || (string)x.Name == "horizontalPlatform" && playerStats.goRight == false)
-                            {
-                                player.Left -= playerStats.horizontalSpeed;
-                            }
-                        }
-
-                        x.BringToFront();
+                        chainInteract1.Interact(x, player, playerStats);
                     }
 
-                    if ((string)x.Tag == "Horizontal")
-                    {
-                        if (player.Bounds.IntersectsWith(x.Bounds))
-                        {
-                            playerStats.force = 8;
-                            player.Top = x.Top - player.Height;
-                            player.Left -= playerStats.horizontalSpeed;
-                        }
+                    //if ((string)x.Tag == "platform")
+                    //{
+                    //    if (player.Bounds.IntersectsWith(x.Bounds))
+                    //    {
+                    //        playerStats.force = 8;
+                    //        player.Top = x.Top - player.Height;
 
-                        x.BringToFront();
-                    }
 
-                    if ((string)x.Tag == "Vertical")
-                    {
-                        if (player.Bounds.IntersectsWith(x.Bounds))
-                        {
-                            playerStats.force = 8;
-                            player.Top = x.Top - player.Height;
-                            player.Left -= playerStats.horizontalSpeed;
-                        }
+                    //        if ((string)x.Name == "horizontalPlatform" && playerStats.goLeft == false || (string)x.Name == "horizontalPlatform" && playerStats.goRight == false)
+                    //        {
+                    //            player.Left -= playerStats.horizontalSpeed;
+                    //        }
+                    //    }
 
-                        x.BringToFront();
-                    }
+                    //    x.BringToFront();
+                    //}
+
+                    //if ((string)x.Tag == "Horizontal")
+                    //{
+                    //    if (player.Bounds.IntersectsWith(x.Bounds))
+                    //    {
+                    //        playerStats.force = 8;
+                    //        player.Top = x.Top - player.Height;
+                    //        player.Left -= playerStats.horizontalSpeed;
+                    //    }
+
+                    //    x.BringToFront();
+                    //}
+
+                    //if ((string)x.Tag == "Vertical")
+                    //{
+                    //    if (player.Bounds.IntersectsWith(x.Bounds))
+                    //    {
+                    //        playerStats.force = 8;
+                    //        player.Top = x.Top - player.Height;
+                    //        player.Left -= playerStats.horizontalSpeed;
+                    //    }
+
+                    //    x.BringToFront();
+                    //}
 
                     if ((string)x.Tag == "coin")
                     {
@@ -290,15 +314,21 @@ namespace Client
                             if (coins[x.Name].value == 1)
                             {
                                 onecoiner.Update();
+                                originator.setLine(onecoiner);
+                                careTaker.addMemento(originator.save());
                             }
                             if (coins[x.Name].value == 2)
                             {
                                 twocoiner.Update();
+                                originator.setLine(twocoiner);
+                                careTaker.addMemento(originator.save());
                             }
 
                             if (coins[x.Name].value == 3)
                             {
                                 threecoiner.Update();
+                                originator.setLine(threecoiner);
+                                careTaker.addMemento(originator.save());
                             }
                             SendCoinsState_Async(x.Name);
                             txtScore.Refresh();
@@ -380,6 +410,8 @@ namespace Client
                             timePassed = 0;
                             SendPowerUpState_Async(x.Name);
                             powerup.Update();
+                            originator.setLine(powerup);
+                            careTaker.addMemento(originator.save());
                             powerUp = iterator.Next();
                             //SelectedGun selectedGun = new PistolWeapon();
                             //selectedGun.SelectNewGun();
@@ -641,6 +673,17 @@ namespace Client
             {
                 playerStats.jumping = true;
             }
+            if (e.KeyCode == Keys.N && careTaker.currSize() > 0)
+            {
+
+                originator.restore(careTaker.undo());
+                originator.getLine().Update();
+            }
+            if (e.KeyCode == Keys.M && careTaker.currSize() > 0)
+            {
+                originator.restore(careTaker.redo());
+                originator.getLine().Update();
+            }
         }
 
         private void KeyIsUp(object sender, KeyEventArgs e)
@@ -681,6 +724,8 @@ namespace Client
             playerStats.goRight = false;
             playerStats.isGameOver = false;
 
+            originator = new Originator();
+            careTaker = new CareTaker();
 
             //txtScore.Text = "Score: " + score;
             txtScore.Refresh();
@@ -762,6 +807,11 @@ namespace Client
                 }
 
             }
+
+        }
+
+        private void Forma_Load(object sender, EventArgs e)
+        {
 
         }
 

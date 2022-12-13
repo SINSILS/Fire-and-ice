@@ -545,6 +545,11 @@ namespace Client
             return picture;
         }
 
+        private void Level2_Load(object sender, EventArgs e)
+        {
+
+        }
+
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
