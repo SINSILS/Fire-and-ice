@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Client._Patterns_Designs._Visitor_Pattern;
 
 namespace Client._Patterns_Designs._Template_Pattern
 {
     public sealed class ThreeCoinUpdate : LabelUpdater
     {
-        public override void LabelText()
+        public override void LabelText(string text)
         {
             try
             {
@@ -18,7 +19,7 @@ namespace Client._Patterns_Designs._Template_Pattern
                     Label? t = currentForm.Controls["updateLabel"] as Label;
                     if (t != null)
                     {
-                        t.Text = "You got three coins!";
+                        t.Text = text;
                     }
                 }
             }
@@ -26,6 +27,11 @@ namespace Client._Patterns_Designs._Template_Pattern
             {
                 throw;
             }
+        }
+
+        public override string Accept(Visitor visitor)
+        {
+            return visitor.Visit(this);
         }
     }
 }

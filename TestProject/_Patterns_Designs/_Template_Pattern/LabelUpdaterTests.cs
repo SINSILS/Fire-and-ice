@@ -1,3 +1,5 @@
+using Client._Patterns_Designs._Visitor_Pattern;
+
 namespace Test._Patterns_Designs._Template_Pattern
 {
     using Client._Patterns_Designs._Template_Pattern;
@@ -10,6 +12,11 @@ namespace Test._Patterns_Designs._Template_Pattern
         {
             public override void LabelText()
             {
+            }
+
+            public override string Accept(Visitor visitor)
+            {
+                throw new NotImplementedException();
             }
         }
 

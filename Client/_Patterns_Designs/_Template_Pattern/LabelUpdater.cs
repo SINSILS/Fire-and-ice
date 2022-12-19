@@ -1,13 +1,16 @@
-﻿namespace Client._Patterns_Designs._Template_Pattern
-{
-    public abstract class LabelUpdater
-    {
-        public abstract void LabelText();
+﻿using Client._Patterns_Designs._Visitor_Pattern;
 
-        public void Update()
+namespace Client._Patterns_Designs._Template_Pattern
+{
+    public abstract class LabelUpdater: Visitable
+    {
+        public abstract void LabelText(string text);
+        public abstract string Accept(Visitor visitor);
+
+        public void Update(string text)
         {
             ShowLabel();
-            LabelText();
+            LabelText(text);
             HideLabel();
         }
 

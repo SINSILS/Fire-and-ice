@@ -10,6 +10,7 @@ using Client._Patterns_Designs._Proxy_Pattern;
 using Client._Patterns_Designs._State_Pattern;
 using Client._Patterns_Designs._Strategy_Patern;
 using Client._Patterns_Designs._Template_Pattern;
+using Client._Patterns_Designs._Visitor_Pattern;
 using Client._Patterns_Designs.Observer;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -47,6 +48,9 @@ namespace Client
     new TenExpression(),
     new OneExpression(),
 };
+
+         TextVisitor textVisitor;
+
         public Level2()
         {
             InitializeComponent();
@@ -88,7 +92,7 @@ namespace Client
             //Console.WriteLine("Cloned obstacle damage: " + clone.Damage.ToString());
 
 
-
+            textVisitor = new TextVisitor();
             IPlatform createdPlatform = new Platform(platform);
             createdPlatform.CreatePlatform();
 
@@ -213,18 +217,22 @@ namespace Client
                         {
                             coins[x.Name].setInvisible();
                             score.increaseScore(coins[x.Name].value);
+                            string text;
                             if (coins[x.Name].value == 1)
                             {
-                                onecoiner.Update();
+                                text = onecoiner.Accept(textVisitor);
+                                onecoiner.Update(text);
                             }
                             if (coins[x.Name].value == 2)
                             {
-                                twocoiner.Update();
+                                text = twocoiner.Accept(textVisitor);
+                                twocoiner.Update(text);
                             }
 
                             if (coins[x.Name].value == 3)
                             {
-                                threecoiner.Update();
+                                text = threecoiner.Accept(textVisitor);
+                                threecoiner.Update(text);
                             }
                             SendCoinsState_Async(x.Name);
                             txtScore.Refresh();

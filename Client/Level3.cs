@@ -11,6 +11,7 @@ using Client._Patterns_Designs._Template_Pattern;
 using Client._Patterns_Designs.Observer;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Runtime.InteropServices;
+using Client._Patterns_Designs._Visitor_Pattern;
 
 namespace Client
 {
@@ -41,6 +42,8 @@ namespace Client
     new TenExpression(),
     new OneExpression(),
 };
+
+         TextVisitor textVisitor;
         public Level3()
         {
             InitializeComponent();
@@ -81,7 +84,7 @@ namespace Client
            // clone.Damage = 0;
             //Console.WriteLine("Cloned obstacle damage: " + clone.Damage.ToString());
 
-
+            textVisitor = new TextVisitor();
 
             IPlatform createdPlatform = new Platform(platform);
             createdPlatform.CreatePlatform();
@@ -207,21 +210,25 @@ namespace Client
 
                                 coins[x.Name].setInvisible();
                                 score.increaseScore(coins[x.Name].value);
+                                string text;
                                 if (coins[x.Name].value == 1)
                                 {
                                     LabelUpdater onecoiner = new OneCoinUpdate();
-                                    onecoiner.Update();
+                                    text = onecoiner.Accept(textVisitor);
+                                    onecoiner.Update(text);
                                 }
                                 if (coins[x.Name].value == 2)
                                 {
                                     LabelUpdater twocoiner = new TwoCoinUpdate();
-                                    twocoiner.Update();
+                                    text = twocoiner.Accept(textVisitor);
+                                    twocoiner.Update(text);
                                 }
 
                                 if (coins[x.Name].value == 3)
                                 {
                                     LabelUpdater threecoiner = new ThreeCoinUpdate();
-                                    threecoiner.Update();
+                                    text = threecoiner.Accept(textVisitor);
+                                    threecoiner.Update(text);
                                 }
                                 SendCoinsState_Async(x.Name);
                                 txtScore.Refresh();

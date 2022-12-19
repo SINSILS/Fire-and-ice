@@ -19,6 +19,7 @@ using Client._Patterns_Designs.Observer;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Runtime.InteropServices;
 using Client._Patterns_Designs._Memento_pattern;
+using Client._Patterns_Designs._Visitor_Pattern;
 
 namespace Client
 {
@@ -70,6 +71,7 @@ namespace Client
         Chain chainInteract1, chainInteract2, chainInteract3;
         Originator originator;
         CareTaker careTaker;
+        TextVisitor textVisitor;
 
         public Forma()
         {
@@ -140,7 +142,7 @@ namespace Client
 
             originator = new Originator();
             careTaker = new CareTaker();
-
+            textVisitor = new TextVisitor();
 
             doors.createDoor(new ClosedDoorState());
             doors.setPicBox(door);
@@ -311,22 +313,26 @@ namespace Client
                         {
                             coins[x.Name].setInvisible();
                             score.increaseScore(coins[x.Name].value);
+                            string text;
                             if (coins[x.Name].value == 1)
                             {
-                                onecoiner.Update();
+                                text = onecoiner.Accept(textVisitor);
+                                onecoiner.Update(text);
                                 originator.setLine(onecoiner);
                                 careTaker.addMemento(originator.save());
                             }
                             if (coins[x.Name].value == 2)
                             {
-                                twocoiner.Update();
+                                text = twocoiner.Accept(textVisitor);
+                                twocoiner.Update(text);
                                 originator.setLine(twocoiner);
                                 careTaker.addMemento(originator.save());
                             }
 
                             if (coins[x.Name].value == 3)
                             {
-                                threecoiner.Update();
+                                text = threecoiner.Accept(textVisitor);
+                                threecoiner.Update(text);
                                 originator.setLine(threecoiner);
                                 careTaker.addMemento(originator.save());
                             }
@@ -409,7 +415,8 @@ namespace Client
                             playerStats.ApplyPowerUp(powerUp);
                             timePassed = 0;
                             SendPowerUpState_Async(x.Name);
-                            powerup.Update();
+                            string text = powerup.Accept(textVisitor);
+                            powerup.Update(text);
                             originator.setLine(powerup);
                             careTaker.addMemento(originator.save());
                             powerUp = iterator.Next();
@@ -677,12 +684,14 @@ namespace Client
             {
 
                 originator.restore(careTaker.undo());
-                originator.getLine().Update();
+                string text = originator.getLine().Accept(textVisitor);
+                originator.getLine().Update(text);
             }
             if (e.KeyCode == Keys.M && careTaker.currSize() > 0)
             {
                 originator.restore(careTaker.redo());
-                originator.getLine().Update();
+                string text = originator.getLine().Accept(textVisitor);
+                originator.getLine().Update(text);
             }
         }
 
